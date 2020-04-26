@@ -1,8 +1,8 @@
-import { combineReducers } from 'redux'
-import exampleReducer from './exampleReducer'
+import { combineReducers } from "redux";
+import getProfile from "./getProfile";
 
 const rootReducers = combineReducers({
-  exampleReducer
-})
+  getProfile,
+});
 
-export default rootReducers
+export default rootReducers;

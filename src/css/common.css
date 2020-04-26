@@ -1,0 +1,22 @@
+.person-header {
+    margin: 2rem 4rem 1rem 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.person-detail {
+    display: flex;
+    flex-direction: column;
+    font-size: 18px;
+}
+
+.upload {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+}
+
+.upload-card {
+    margin-right: 14px;
+}

@@ -11,3 +11,8 @@
 .logo img {
   width: 12em;
 }
+
+body {
+  font: lato;
+  background-color: #f6f5fa ;
+}

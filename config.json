@@ -1,0 +1,8 @@
+{
+    "nomenclature": {
+        "name": "no_dues",
+        "verboseName": "No dues"
+    },
+    "baseUrl": "/no_dues",
+    "source": "no_dues/src/index"
+}

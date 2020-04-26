@@ -1,0 +1,13 @@
+.content-div {
+  height: 100%;
+
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+
+  flex-grow: 1;
+}
+
+.logo img {
+  width: 12em;
+}

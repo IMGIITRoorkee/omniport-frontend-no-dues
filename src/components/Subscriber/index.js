@@ -1,10 +1,34 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, Route, Switch, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
-import { Divider, Button, Icon } from "semantic-ui-react";
+import { Button, Icon } from "semantic-ui-react";
+
+import SubscriberHome from "./home";
+import IdentityCardUpload from "./identityCardUpload";
+import HostelUploads from "./hostelUploads";
+import Permission from "./permission";
 
 import common from "../../css/common.css";
+
+function MainComponent({ profile, match }) {
+  if (profile.idCard === null) {
+    return <IdentityCardUpload match={match} />;
+  } else if (!profile.requiredAuthoritiesSelected) {
+    return <HostelUploads />;
+  } else {
+    return (
+      <Switch>
+        <Route exact path={`${match.path}`} component={SubscriberHome} />
+        <Route
+          path={`${match.path}permission/:perm_id`}
+          component={Permission}
+        />
+        <Route render={() => <Redirect to="/404" />} />
+      </Switch>
+    );
+  }
+}
 
 class Subscriber extends Component {
   fileInputRef = React.createRef();
@@ -14,9 +38,9 @@ class Subscriber extends Component {
   };
 
   render() {
-    const { profile } = this.props;
+    const { profile, match } = this.props;
     return (
-      <div>
+      <div className={common["main-div"]} >
         <div styleName="common.person-header">
           <div styleName="common.person-detail">
             Name :- {profile.personName}
@@ -51,7 +75,7 @@ class Subscriber extends Component {
             />
           </div>
         </div>
-        <hr />
+        <MainComponent profile={profile} match={match} />
       </div>
     );
   }

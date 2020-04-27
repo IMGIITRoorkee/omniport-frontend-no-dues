@@ -30,10 +30,9 @@ class App extends Component {
     ];
 
     const { profile } = this.props;
-
     if (profile.isFetching) {
       return (
-        <Dimmer inverted>
+        <Dimmer active inverted>
           <Loader />
         </Dimmer>
       );
@@ -45,7 +44,11 @@ class App extends Component {
         <AppMain>
           <div styleName="main.app-main">
             <Scrollbars autoHide>
-              {isVerifier(profile.data) ? <Verifier profile={profile.data} /> : <Subscriber profile={profile.data} />}
+              {isVerifier(profile.data) ? (
+                <Verifier match={this.props.match} profile={profile.data} />
+              ) : (
+                <Subscriber match={this.props.match} profile={profile.data} />
+              )}
             </Scrollbars>
           </div>
         </AppMain>

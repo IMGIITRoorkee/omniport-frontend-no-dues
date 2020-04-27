@@ -1,0 +1,31 @@
+.main-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 1rem
+}
+
+.hostel-upload-form {
+    margin: 4rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.upload-btn {
+    align-self: flex-end;
+    margin: 1rem !important;
+    margin-right: 0 !important;
+}
+
+.notif {
+    font-size: 16px;
+}
+
+.cancel-btn {
+    cursor: pointer;
+}
+
+.continue-btn {
+    cursor: pointer;
+    color: #016936;
+}

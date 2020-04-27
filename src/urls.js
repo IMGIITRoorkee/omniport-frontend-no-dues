@@ -12,6 +12,10 @@ export function urlHomeView() {
   return `${urlBaseView()}`;
 }
 
+export function urlPermissionView(id) {
+  return `${urlBaseView()}/permission/${id}`
+}
+
 // Backend Urls
 
 // Base API URL
@@ -26,6 +30,18 @@ export function profileApi() {
 
 export function bhawanOptionsApi() {
     return `${BhawanUploadApi()}`
+}
+
+export function permissionListApi() {
+  return `${urlBaseApi()}/permission`
+}
+
+export function permissionDetailApi(id) {
+  return `${urlBaseApi()}/permission/${id}`
+}
+
+export function permissionCommentApi() {
+  return `${urlBaseApi()}/comment/`
 }
 
 // Post APIs

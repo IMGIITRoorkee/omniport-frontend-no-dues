@@ -34,3 +34,27 @@
   max-width: 900px;
   margin: 4rem;
 }
+
+.permission-chats {
+  padding: 2rem;
+  height: 100%;
+  display: flex;
+  max-width: 1100px;
+  flex-direction: column;
+}
+
+.name-header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.header-name-div {
+  display: flex;
+  align-items: center;
+}
+
+.header-name-div > h2 {
+  margin: 0;
+  margin-left: 5px;
+}

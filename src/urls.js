@@ -4,7 +4,7 @@ import appConfig from "../config.json";
 
 // Base URL
 export function urlBaseView() {
-  return `${appConfig.BaseUrl}`;
+  return `${appConfig.baseUrl}`;
 }
 
 // Home
@@ -13,7 +13,7 @@ export function urlHomeView() {
 }
 
 export function urlPermissionView(id) {
-  return `${urlBaseView()}/permission/${id}`
+  return `${urlHomeView()}/permission/${id}`
 }
 
 // Backend Urls

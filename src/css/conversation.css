@@ -1,0 +1,40 @@
+.comment-space {
+  max-width: 1000px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.comments {
+  flex: 1;
+  padding-bottom: 10px;
+}
+
+.comment {
+  margin: 0.8rem;
+  word-break: break-all;
+  margin-bottom: 1.5rem;
+}
+
+.comment-name {
+  margin: 0;
+}
+
+.comment-duration {
+  margin: 0;
+  margin-bottom: 0.25rem;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.post-buttons {
+    align-items: center;
+    margin: 0.5rem;
+    margin-right: 0;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.comment-form {
+    margin-left: 0.8rem ;
+}

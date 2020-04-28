@@ -35,22 +35,18 @@ const StatusBtn = ({ status, changeStatus, permissionId }) => {
   } else if (status === "req") {
     return (
       <Header as="h5" color="blue">
-        <Icon fitted name="info circle" size="tiny" color="blue" /> Requested
+        <Icon fitted name="clock outline" size="tiny" color="blue" /> Requested
       </Header>
     );
   } else if (status === "rep") {
     return (
       <>
         <Link to={urlPermissionView(permissionId)}>
-          <Button basic color="yellow">
-            <Icon name="warning sign" /> Check Comments
+          <Button basic color="blue">
+            <Icon name="comment" /> Go To Comments
           </Button>
         </Link>
-        <Popup
-          position="top left"
-          content="There is an issue raised by the verifier, please check comments"
-          trigger={<Icon name="question" />}
-        />
+        Issue Raised
       </>
     );
   } else {

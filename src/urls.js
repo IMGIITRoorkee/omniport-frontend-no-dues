@@ -37,7 +37,7 @@ export function permissionListApi() {
 }
 
 export function permissionDetailApi(id) {
-  return `${urlBaseApi()}/permission/${id}`
+  return `${urlBaseApi()}/permission/${id}/`
 }
 
 export function permissionCommentApi() {

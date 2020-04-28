@@ -21,7 +21,7 @@ function MainComponent({ profile, match }) {
       <Switch>
         <Route exact path={`${match.path}`} component={SubscriberHome} />
         <Route
-          path={`${match.path}permission/:perm_id`}
+          path={`${match.path}permission/:perm_id/`}
           component={Permission}
         />
         <Route render={() => <Redirect to="/404" />} />
@@ -40,7 +40,7 @@ class Subscriber extends Component {
   render() {
     const { profile, match } = this.props;
     return (
-      <div className={common["main-div"]} >
+      <div className={common["main-div"]}>
         <div styleName="common.person-header">
           <div styleName="common.person-detail">
             Name :- {profile.personName}

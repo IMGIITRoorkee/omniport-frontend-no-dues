@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import { Link } from "react-router-dom";
 import {
   Dimmer,
   Loader,
@@ -12,14 +12,23 @@ import {
 
 import { connect } from "react-redux";
 
-import { getPermissionList } from "../../actions/getPermissions";
+import { urlPermissionView } from "../../urls";
+
+import {
+  getPermissionList,
+  changeStatusDetails,
+} from "../../actions/getPermissions";
 
 import main from "../../css/subscriber.css";
 
-const StatusBtn = ({ status }) => {
+const StatusBtn = ({ status, changeStatus, permissionId }) => {
   if (status === "nrq") {
     return (
-      <Button basic color="grey">
+      <Button
+        onClick={() => changeStatus("req", permissionId)}
+        basic
+        color="grey"
+      >
         <Icon name="paper plane" /> Ask For Approval
       </Button>
     );
@@ -32,9 +41,11 @@ const StatusBtn = ({ status }) => {
   } else if (status === "rep") {
     return (
       <>
-        <Button basic color="yellow">
-          <Icon name="warning sign" /> Check Comments
-        </Button>
+        <Link to={urlPermissionView(permissionId)}>
+          <Button basic color="yellow">
+            <Icon name="warning sign" /> Check Comments
+          </Button>
+        </Link>
         <Popup
           position="top left"
           content="There is an issue raised by the verifier, please check comments"
@@ -57,7 +68,7 @@ class SubscriberHome extends Component {
   }
 
   render() {
-    const { permissions } = this.props;
+    const { permissions, changeStatusDetails } = this.props;
     console.log(permissions);
     if (permissions.isFetching) {
       return (
@@ -83,7 +94,11 @@ class SubscriberHome extends Component {
                 <Table.Row>
                   <Table.Cell>{item.authority.fullName}</Table.Cell>
                   <Table.Cell textAlign="center">
-                    <StatusBtn status={item.status} />
+                    <StatusBtn
+                      permissionId={item.id}
+                      changeStatus={changeStatusDetails}
+                      status={item.status}
+                    />
                   </Table.Cell>
                 </Table.Row>
               );
@@ -105,6 +120,9 @@ const mapDispatchtoProps = (dispatch) => {
   return {
     getPermissionList: () => {
       dispatch(getPermissionList());
+    },
+    changeStatusDetails: (newStatus, permissionId) => {
+      dispatch(changeStatusDetails(newStatus, permissionId));
     },
   };
 };

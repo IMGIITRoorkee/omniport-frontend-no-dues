@@ -1,10 +1,15 @@
 import {
   GET_PERMISSION_LIST,
   UPDATE_PERMISSION_STATUS,
+  GET_PERMISSION_FILTER_REQUEST
 } from "../constants/actions";
 
 const getPermissions = (state = { isFetching: true, data: [] }, action) => {
   switch (action.type) {
+    case GET_PERMISSION_FILTER_REQUEST:
+      return {
+        isFetching: true
+      }
     case GET_PERMISSION_LIST:
       return {
         isFetching: false,

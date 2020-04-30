@@ -36,6 +36,10 @@ export function permissionListApi() {
   return `${urlBaseApi()}/permission`
 }
 
+export function permissionListFilterApi(filter) {
+  return `${permissionListApi()}/?status=${filter}`
+}
+
 export function permissionDetailApi(id) {
   return `${urlBaseApi()}/permission/${id}/`
 }
@@ -47,6 +51,10 @@ export function permissionCommentApi() {
 // Post APIs
 export function IdentityUploadApi() {
     return `${profileApi()}`
+}
+
+export function MassApprovalApi() {
+  return `${urlBaseApi()}/update_status/`
 }
 
 export function BhawanUploadApi() {

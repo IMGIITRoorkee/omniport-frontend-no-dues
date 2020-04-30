@@ -43,11 +43,11 @@ class Subscriber extends Component {
       <div className={common["main-div"]}>
         <div styleName="common.person-header">
           <div styleName="common.person-detail">
-            Name :- {profile.personName}
+            Name: {profile.personName}
             <br />
-            Enrollment No :- {profile.personEnrolment}
+            Enrollment No: {profile.personEnrolment}
             <br />
-            Branch :- {profile.personDepartment}
+            Branch: {profile.personDepartment}
           </div>
           <div styleName="common.upload">
             {profile.idCard !== null && (

@@ -7,8 +7,10 @@ import { Link } from "react-router-dom";
 
 import moment from "moment";
 
+import { DefaultDP } from "formula_one";
+
 import { commentOnPermission } from "../../actions/getPermissions";
-import { Icon, Form, TextArea, Button } from "semantic-ui-react";
+import { Icon, Form, TextArea, Button, Comment } from "semantic-ui-react";
 
 import { isVerifier } from "../../utils/userRole";
 
@@ -55,20 +57,29 @@ class Conversation extends Component {
   render() {
     const { comments, authority, subscriber, profile } = this.props;
     return (
-      <div className={main["comment-space"]}>
-        <div className={main["comments"]}>
-          <Scrollbars ref={(e) => (this.scrollbar = e)} autoHide>
-            {comments.map((item, key) => {
-              return (
-                <div className={main["comment"]}>
-                  <h3 className={main["comment-name"]}>
-                    {item.commenter.id === subscriber.person
+      <Comment.Group size="large">
+        {comments.map((item, key) => {
+          return (
+            <Comment className={main["comment"]}>
+              <div className={main["profile-pic"]}>
+                <DefaultDP
+                  name={
+                    item.commenter.id === subscriber.person
                       ? subscriber.personName
-                      : authority.fullName}
-                  </h3>
-                  <div className={main["comment-duration"]}>
-                    {moment(item.datetimeCreated).fromNow()}
-                  </div>
+                      : authority.fullName
+                  }
+                />
+              </div>
+              <Comment.Content>
+                <Comment.Author>
+                  {item.commenter.id === subscriber.person
+                    ? subscriber.personName
+                    : authority.fullName}
+                </Comment.Author>
+                <Comment.Metadata>
+                  {moment(item.datetimeCreated).fromNow()}
+                </Comment.Metadata>
+                <Comment.Text>
                   <p> {item.text} </p>
                   {item.attachment !== null && (
                     <Link
@@ -79,40 +90,61 @@ class Conversation extends Component {
                       }}
                     >
                       {" "}
-                      <Icon fitted size="large" name="file" />{" "}
+                      <Button
+                        color="blue"
+                        basic
+                        content="View Attachement"
+                        icon="file"
+                      />
                     </Link>
                   )}
-                </div>
-              );
-            })}
-          </Scrollbars>
-        </div>
-        <Form className={main["comment-form"]}>
-          <h3 className={main["comment-name"]}>
-            {isVerifier(profile.data)
-              ? profile.data.authority.fullName
-              : profile.data.personName}
-          </h3>
-          <TextArea value={this.state.text} onChange={this.changeText} />
-          <div className={main["post-buttons"]}>
-            {this.state.attachment !== null && (
-              <Icon color="green" size="large" name="check circle" />
-            )}
-            <Button primary onClick={() => this.fileInputRef.current.click()}>
-              <Icon name="upload" /> Upload a file
-            </Button>
-            <input
-              ref={this.fileInputRef}
-              type="file"
-              hidden
-              onChange={this.addAttachement}
+                </Comment.Text>
+              </Comment.Content>
+            </Comment>
+          );
+        })}
+        <Comment className={main["comment"]}>
+          <div className={main["profile-pic"]}>
+            <DefaultDP
+              name={
+                isVerifier(profile.data)
+                  ? profile.data.authority.fullName
+                  : profile.data.personName
+              }
             />
-            <Button onClick={this.postComment} positive>
-              <Icon name="paper plane" /> Send
-            </Button>
           </div>
-        </Form>
-      </div>
+          <Comment.Content className={main["comment-form"]}>
+            <Comment.Author>
+              {isVerifier(profile.data)
+                ? profile.data.authority.fullName
+                : profile.data.personName}
+            </Comment.Author>
+            <Form>
+              <TextArea value={this.state.text} onChange={this.changeText} />
+              <div className={main["post-buttons"]}>
+                {this.state.attachment !== null && (
+                  <Icon color="green" size="large" name="check circle" />
+                )}
+                <Button
+                  primary
+                  onClick={() => this.fileInputRef.current.click()}
+                >
+                  <Icon name="upload" /> Upload a file
+                </Button>
+                <input
+                  ref={this.fileInputRef}
+                  type="file"
+                  hidden
+                  onChange={this.addAttachement}
+                />
+                <Button onClick={this.postComment} positive>
+                  <Icon name="paper plane" /> Send
+                </Button>
+              </div>
+            </Form>
+          </Comment.Content>
+        </Comment>
+      </Comment.Group>
     );
   }
 }

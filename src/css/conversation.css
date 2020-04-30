@@ -11,9 +11,9 @@
 }
 
 .comment {
-  margin: 0.8rem;
+  display: flex;
+  max-width: 1000px;
   word-break: break-all;
-  margin-bottom: 1.5rem;
 }
 
 .comment-name {
@@ -28,13 +28,22 @@
 }
 
 .post-buttons {
-    align-items: center;
-    margin: 0.5rem;
-    margin-right: 0;
-    display: flex;
-    justify-content: flex-end;
+  align-items: center;
+  margin: 0.5rem;
+  margin-right: 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.profile-pic {
+  display: block;
+  width: 2.5em;
+  height: 100%;
+  float: left;
+  margin: .2em 0 0;
+  margin-right: .5em;
 }
 
 .comment-form {
-    margin-left: 0.8rem ;
+  flex-grow: 100;
 }

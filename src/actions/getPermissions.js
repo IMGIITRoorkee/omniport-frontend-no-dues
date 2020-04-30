@@ -19,6 +19,8 @@ import {
   MassApprovalApi,
 } from "../urls";
 
+import { AppropriateStatusName } from "../components/Verifier/permission";
+
 export const getPermissionList = () => {
   return (dispatch) => {
     axios
@@ -117,10 +119,7 @@ export const changeStatusDetails = (new_status, permissionId) => {
         });
         toast({
           type: "success",
-          title:
-            new_status === "req"
-              ? "You have successfully requested."
-              : "Permission Approved",
+          title: `${AppropriateStatusName(new_status)} successful`,
           animation: "fade up",
           icon: "thumbs up",
           time: 4000,

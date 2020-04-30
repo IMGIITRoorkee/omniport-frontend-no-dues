@@ -17,6 +17,8 @@ import {
   Form,
 } from "semantic-ui-react";
 
+import moment from "moment";
+
 import {
   getPermissionList,
   getPermissionFilter,
@@ -43,8 +45,8 @@ const StatusDetail = ({ status }) => {
     );
   } else if (status === "rep") {
     return (
-      <Header as="h5" color="red">
-        Reported
+      <Header as="h5" color="yellow">
+        <Icon fitted name="warning sign" size="tiny" color="yellow" /> Reported
       </Header>
     );
   } else if (status === "req") {
@@ -71,7 +73,7 @@ class Home extends Component {
   state = {
     enrollmentMass: {},
     statusChange: {},
-    presentFilter: "",
+    presentFilter: "pen",
     enrollmentNos: "",
     massApprovalModalOpen: false,
     massApprovalStatus: "",
@@ -87,7 +89,7 @@ class Home extends Component {
   };
 
   componentDidMount() {
-    this.props.getPermissionList();
+    this.props.getPermissionFilter("req&status=rep");
   }
 
   componentDidUpdate(prevProps) {
@@ -123,7 +125,12 @@ class Home extends Component {
   };
 
   onEnrollmentNosChange = (e, { value }) => {
-    this.setState({ enrollmentNos: value });
+    this.setState({
+      enrollmentNos: value
+        .replace(/[\r\n]+/gm, ",")
+        .replace(/[,]+/g, ",")
+        .replace(/(^\s+|\s+$)/g, ""),
+    });
   };
 
   onMassApprovalStatus = (e, { value }) => {
@@ -203,7 +210,7 @@ class Home extends Component {
 
     return (
       <div className={main["main-content"]}>
-        <Button.Group>
+        <Button.Group className={main["white-bg"]} basic>
           <Button
             onClick={() => this.onFilterClick("pen")}
             active={presentFilter === "pen"}
@@ -281,7 +288,11 @@ class Home extends Component {
               <Table.HeaderCell>Department</Table.HeaderCell>
               <Table.HeaderCell>ID Card</Table.HeaderCell>
               <Table.HeaderCell>Status</Table.HeaderCell>
-              <Table.HeaderCell>Action</Table.HeaderCell>
+              {presentFilter !== "app" && presentFilter !== "nap" && (
+                <Table.HeaderCell>Action</Table.HeaderCell>
+              )}
+              <Table.HeaderCell>Last Modified by</Table.HeaderCell>
+              <Table.HeaderCell>Last Modified on</Table.HeaderCell>
               <Table.HeaderCell>Comments</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
@@ -302,35 +313,48 @@ class Home extends Component {
                   <Table.Cell>{item.subscriber.personDegree}</Table.Cell>
                   <Table.Cell>{item.subscriber.personDepartment}</Table.Cell>
                   <Table.Cell textAlign="center">
-                    <Link
-                      to={item.subscriber.idCard}
-                      onClick={(event) => {
-                        event.preventDefault();
-                        window.open(item.subscriber.idCard);
-                      }}
-                    >
-                      <Icon name="eye" size="large" />
-                    </Link>
+                    {item.subscriber.idCard !== null && (
+                      <Link
+                        to={item.subscriber.idCard}
+                        onClick={(event) => {
+                          event.preventDefault();
+                          window.open(item.subscriber.idCard);
+                        }}
+                      >
+                        <Icon name="eye" size="large" />
+                      </Link>
+                    )}
                   </Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell textAlign="center">
                     <StatusDetail status={item.status} />
                   </Table.Cell>
+                  {presentFilter !== "app" && presentFilter !== "nap" && (
+                    <Table.Cell textAlign="center">
+                      <Select
+                        value={statusChange[item.id]}
+                        onChange={(e, { value }) => {
+                          this.statusChangeAction(item.id, value);
+                        }}
+                        compact
+                        options={statusOptions}
+                        placeholder="New Status"
+                      />
+                      <Button
+                        onClick={() => this.onStatusChange(item.id)}
+                        type="submit"
+                        basic
+                      >
+                        Mark
+                      </Button>
+                    </Table.Cell>
+                  )}
                   <Table.Cell>
-                    <Select
-                      value={statusChange[item.id]}
-                      onChange={(e, { value }) => {
-                        this.statusChangeAction(item.id, value);
-                      }}
-                      compact
-                      options={statusOptions}
-                      placeholder="New Status"
-                    />
-                    <Button
-                      onClick={() => this.onStatusChange(item.id)}
-                      type="submit"
-                    >
-                      Post
-                    </Button>
+                    {item.lastModifiedBy !== null && item.lastModifiedBy}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {moment(item.datetimeModified).format(
+                      "Do MMMM YYYY, h:mm a"
+                    )}
                   </Table.Cell>
                   <Table.Cell textAlign="center">
                     <Link to={urlPermissionView(item.id)}>

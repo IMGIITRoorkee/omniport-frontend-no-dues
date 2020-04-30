@@ -24,6 +24,8 @@ import {
   massUpdateStatus,
 } from "../../actions/getPermissions";
 
+import { urlSubscriberDetail, urlPermissionView } from "../../urls";
+
 import main from "../../css/verifier.css";
 
 const StatusDetail = ({ status }) => {
@@ -266,7 +268,9 @@ class Home extends Component {
             />
           </Modal.Actions>
         </Modal>
-        <Button icon="eye" floated="right" content="View Student Status" />
+        <Link to={urlSubscriberDetail()}>
+          <Button icon="eye" floated="right" content="View Student Status" />
+        </Link>
         <Table celled>
           <Table.Header>
             <Table.Row>
@@ -329,7 +333,9 @@ class Home extends Component {
                     </Button>
                   </Table.Cell>
                   <Table.Cell textAlign="center">
-                    <Button icon="comments" primary />
+                    <Link to={urlPermissionView(item.id)}>
+                      <Button icon="comments" primary />
+                    </Link>
                   </Table.Cell>
                 </Table.Row>
               );

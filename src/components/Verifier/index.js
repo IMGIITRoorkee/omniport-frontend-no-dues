@@ -2,22 +2,24 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link, Route, Switch, Redirect } from "react-router-dom";
 
-import VeriferHome from "./home"
-import Permission from "./permission"
+import VeriferHome from "./home";
+import Permission from "./permission";
+import SubscriberDetail from "./subscriberDetail";
 
 import common from "../../css/common.css";
 
-function MainComponent({profile, match}) {
+function MainComponent({ profile, match }) {
   return (
     <Switch>
-        <Route exact path={`${match.path}`} component={VeriferHome} />
-        <Route
-          path={`${match.path}permission/:perm_id/`}
-          component={Permission}
-        />
-        <Route render={() => <Redirect to="/404" />} />
-      </Switch>
-  )
+      <Route exact path={`${match.path}`} component={VeriferHome} />
+      <Route
+        path={`${match.path}permission/:perm_id/`}
+        component={Permission}
+      />
+      <Route path={`${match.path}subscriber`} component={SubscriberDetail} />
+      <Route render={() => <Redirect to="/404" />} />
+    </Switch>
+  );
 }
 
 class Verifer extends Component {

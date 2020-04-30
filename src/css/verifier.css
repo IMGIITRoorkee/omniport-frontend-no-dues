@@ -1,3 +1,40 @@
-.main-content{
-    margin: 0.5rem 1.5rem;
+.main-content {
+  margin: 0.5rem 1.5rem;
+}
+
+.search-input {
+  text-align: center;
+}
+
+.student-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.permission-chats {
+  padding: 2rem;
+  height: 100%;
+  display: flex;
+  max-width: 1100px;
+  flex-direction: column;
+}
+
+.header-name-div {
+  display: flex;
+  align-items: center;
+}
+
+.name-header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.header-name-div > div {
+  margin-left: 7.5px;
+}
+
+.header-name-div > div > h2 {
+  margin: 0;
 }

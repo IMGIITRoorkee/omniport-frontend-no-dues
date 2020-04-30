@@ -1,6 +1,7 @@
 import {
   GET_PERMISSION_DETAIL,
   ADD_COMMENT_PERMISSION,
+  UPDATE_PERMISSION_STATUS,
 } from "../constants/actions";
 
 const getPermissionDetail = (
@@ -10,6 +11,14 @@ const getPermissionDetail = (
   switch (action.type) {
     case GET_PERMISSION_DETAIL:
       return { data: action.payload, isFetching: false };
+    case UPDATE_PERMISSION_STATUS:
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          status: action.payload.status,
+        },
+      };
     case ADD_COMMENT_PERMISSION:
       return {
         isFetching: false,

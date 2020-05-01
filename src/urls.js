@@ -20,6 +20,10 @@ export function urlSubscriberDetail() {
   return `${urlHomeView()}/subscriber`
 }
 
+export function urlSearchedSubscriber(enrollmentNo) {
+  return `${urlSubscriberDetail()}/?enrolment_number=${enrollmentNo}`
+}
+
 // Backend Urls
 
 // Base API URL

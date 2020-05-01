@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import moment from "moment";
 
 import { Input, Button, Icon, Header, Table, Tab } from "semantic-ui-react";
 
 import { getSubscriberdetail } from "../../actions/getSubscriberDetail";
 
-import { urlHomeView } from "../../urls";
+import { urlHomeView, urlSearchedSubscriber } from "../../urls";
 
 import main from "../../css/verifier.css";
 import common from "../../css/common.css";
@@ -17,11 +17,22 @@ class SubscriberDetail extends Component {
     enrollmentNo: "",
   };
 
+  componentDidMount() {
+    const query = new URLSearchParams(this.props.location.search);
+    const enrollmentNo = query.get("enrolment_number");
+    if (enrollmentNo !== null) {
+      this.setState({ enrollmentNo }, () =>
+        this.props.getSubscriberDetail(this.state.enrollmentNo)
+      );
+    }
+  }
+
   onChangeSearch = (e, { value }) => {
     this.setState({ enrollmentNo: value });
   };
 
   onSubmitSearch = () => {
+    this.props.history.push(urlSearchedSubscriber(this.state.enrollmentNo));
     this.props.getSubscriberDetail(this.state.enrollmentNo);
   };
 
@@ -29,9 +40,9 @@ class SubscriberDetail extends Component {
     const { studentDetail } = this.props;
     return (
       <>
-      <div className={common["back-btn"]} >
+        <div className={common["back-btn"]}>
           <Link to={urlHomeView()}>
-          <Button primary content="Back" icon="arrow left" />
+            <Button primary content="Back" icon="arrow left" />
           </Link>
         </div>
         <div className={main["main-content"]}>
@@ -131,4 +142,7 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SubscriberDetail);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(SubscriberDetail));

@@ -96,7 +96,7 @@ class Permission extends Component {
                 name={AppropriateStatusIcon(permission.data.status)}
                 size="large"
               />
-              <div className={common["person-detail"]}>
+              <div className={[common["person-detail"], common["sub-details"]].join(" ")}>
                 <h2>{AppropriateStatusName(permission.data.status)}</h2>
                 {permission.data.subscriber.personName}
                 <br />

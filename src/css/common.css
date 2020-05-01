@@ -13,6 +13,10 @@
   font-size: 18px;
 }
 
+.sub-details {
+  font-size: 16px;
+}
+
 .upload {
 padding-top: 15px;
   display: flex;

@@ -15,6 +15,7 @@ import {
   Header,
   Modal,
   Form,
+  Dropdown,
 } from "semantic-ui-react";
 
 import moment from "moment";
@@ -184,6 +185,18 @@ class Home extends Component {
     });
   };
 
+  onPendingClick = () => {
+    this.props.getPermissionFilter("req&status=rep");
+  };
+
+  onReportedClick = () => {
+    this.props.getPermissionFilter("rep");
+  };
+
+  onRequestClick = () => {
+    this.props.getPermissionFilter("req");
+  };
+
   onCloseMassApprovalModal = () => {
     this.setState({
       massApprovalModalOpen: false,
@@ -281,13 +294,26 @@ class Home extends Component {
         <Table celled>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell></Table.HeaderCell>
+              {presentFilter !== "app" && presentFilter !== "nap" && (
+                <Table.HeaderCell></Table.HeaderCell>
+              )}
               <Table.HeaderCell>Name</Table.HeaderCell>
               <Table.HeaderCell>Enrolment No.</Table.HeaderCell>
               <Table.HeaderCell>Branch</Table.HeaderCell>
               <Table.HeaderCell>Department</Table.HeaderCell>
               <Table.HeaderCell>ID Card</Table.HeaderCell>
-              <Table.HeaderCell>Status</Table.HeaderCell>
+              <Table.HeaderCell>
+                Status{" "}
+                {presentFilter === "pen" && (
+                  <Dropdown>
+                    <Dropdown.Menu>
+                      <Dropdown.Item onClick={this.onPendingClick} text="Pending" />
+                      <Dropdown.Item onClick={this.onReportedClick} text="Reported" />
+                      <Dropdown.Item onClick={this.onRequestClick} text="Requested" />
+                    </Dropdown.Menu>
+                  </Dropdown>
+                )}
+              </Table.HeaderCell>
               {presentFilter !== "app" && presentFilter !== "nap" && (
                 <Table.HeaderCell>Action</Table.HeaderCell>
               )}
@@ -300,14 +326,18 @@ class Home extends Component {
             {permissions.data.map((item, key) => {
               return (
                 <Table.Row>
-                  <Table.Cell>
-                    <Checkbox
-                      onChange={() =>
-                        this.checkboxOnClick(item.subscriber.personEnrolment)
-                      }
-                      checked={enrollmentMass[item.subscriber.personEnrolment]}
-                    />
-                  </Table.Cell>
+                  {presentFilter !== "app" && presentFilter !== "nap" && (
+                    <Table.Cell>
+                      <Checkbox
+                        onChange={() =>
+                          this.checkboxOnClick(item.subscriber.personEnrolment)
+                        }
+                        checked={
+                          enrollmentMass[item.subscriber.personEnrolment]
+                        }
+                      />
+                    </Table.Cell>
+                  )}
                   <Table.Cell>{item.subscriber.personName}</Table.Cell>
                   <Table.Cell>{item.subscriber.personEnrolment}</Table.Cell>
                   <Table.Cell>{item.subscriber.personDegree}</Table.Cell>

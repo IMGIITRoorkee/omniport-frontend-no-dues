@@ -40,19 +40,21 @@ const StatusBtn = ({ status, changeStatus, permissionId }) => {
     );
   } else if (status === "rep") {
     return (
-      <>
-        <Link to={urlPermissionView(permissionId)}>
-          <Button basic color="blue">
-            <Icon name="comment" /> Go To Comments
-          </Button>
-        </Link>
-        Issue Raised
-      </>
+      <Header as="h5" color="yellow">
+        <Icon fitted name="warning sign" size="tiny" color="yellow" /> Issue
+        Raised
+      </Header>
     );
-  } else {
+  } else if (status === "app") {
     return (
       <Header as="h5" color="green">
         <Icon fitted name="check" size="tiny" color="green" /> Approved
+      </Header>
+    );
+  } else if (status === "nap") {
+    return (
+      <Header as="h5" color="grey">
+        <Icon fitted name="check" size="tiny" color="green" /> Not Applicable
       </Header>
     );
   }
@@ -82,6 +84,7 @@ class SubscriberHome extends Component {
               <Table.HeaderCell textAlign="center" width={4}>
                 Status/Action
               </Table.HeaderCell>
+              <Table.HeaderCell>Comments</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -95,6 +98,13 @@ class SubscriberHome extends Component {
                       changeStatus={changeStatusDetails}
                       status={item.status}
                     />
+                  </Table.Cell>
+                  <Table.Cell>
+                    {item.status !== "nrq" && (
+                      <Link to={urlPermissionView(item.id)}>
+                        <Button icon="comments" primary />
+                      </Link>
+                    )}
                   </Table.Cell>
                 </Table.Row>
               );

@@ -5,6 +5,22 @@
   padding: 1rem;
 }
 
+.id-card {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.main-segment {
+  padding: 4rem !important;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .hostel-upload-form {
   margin: 4rem;
   display: flex;
@@ -19,6 +35,7 @@
 
 .notif {
   font-size: 16px;
+  margin-bottom: 0.5em;
 }
 
 .cancel-btn {
@@ -54,7 +71,14 @@
   align-items: center;
 }
 
-.header-name-div > h2 {
-  margin: 0;
+.header-name-div > div {
   margin-left: 5px;
+}
+
+.header-name-div > div > h2 {
+  margin: 0;
+}
+
+.gray-text {
+  color: #777777;
 }

@@ -1,13 +1,56 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
-import { Loader, Dimmer, Icon, Divider } from "semantic-ui-react";
+import { Loader, Dimmer, Icon, Divider, Button } from "semantic-ui-react";
 
 import { getPermissionDetail } from "../../actions/getPermissions";
+
+import { urlHomeView } from "../../urls";
 
 import Conversation from "../Conversation";
 
 import main from "../../css/subscriber.css";
+import common from "../../css/common.css";
+
+export const AppropriateStatusName = (status) => {
+  switch (status) {
+    case "app":
+      return "Approved by";
+    case "nap":
+      return "Not Applicable to";
+    case "rep":
+      return "Issue Raised by";
+    case "req":
+      return "Requested to";
+  }
+};
+
+const AppropriateStatusIcon = (status) => {
+  switch (status) {
+    case "app":
+      return "check";
+    case "nap":
+      return "check";
+    case "rep":
+      return "warning sign";
+    case "req":
+      return "clock outline";
+  }
+};
+
+const AppropriateStatusColor = (status) => {
+  switch (status) {
+    case "app":
+      return "green";
+    case "nap":
+      return "green";
+    case "rep":
+      return "yellow";
+    case "req":
+      return "blue";
+  }
+};
 
 class SubscriberPermission extends Component {
   componentDidMount() {
@@ -27,24 +70,43 @@ class SubscriberPermission extends Component {
     }
 
     return (
-      <div className={main["permission-chats"]}>
-        <div className={main["name-header"]}>
-          <div className={main["header-name-div"]}>
-            <Icon color="yellow" name="warning sign" size="large" />
-            <h2>Issue Raised by {permission.data.authority.fullName}</h2>
-          </div>
-          <a href={`mailto:${permission.data.authority.email}`}>
-            {permission.data.authority.email}
-          </a>
+      <>
+        <div className={common["back-btn"]}>
+          <Link to={urlHomeView()}>
+            <Button primary content="Back" icon="arrow left" />
+          </Link>
         </div>
-        <Divider />
-        <Conversation
-          permissionId={permission.data.id}
-          comments={permission.data.comments}
-          authority={permission.data.authority}
-          subscriber={permission.data.subscriber}
-        />
-      </div>
+        <div className={main["permission-chats"]}>
+          <div className={main["name-header"]}>
+            <div className={main["header-name-div"]}>
+              <Icon
+                color={AppropriateStatusColor(permission.data.status)}
+                name={AppropriateStatusIcon(permission.data.status)}
+                size="large"
+              />
+              <div>
+                <h2>
+                  {AppropriateStatusName(permission.data.status)}{" "}
+                  {permission.data.authority.fullName}
+                </h2>
+                <div className={main["gray-text"]}>
+                  {permission.data.authority.description}
+                </div>
+              </div>
+            </div>
+            <a href={`mailto:${permission.data.authority.email}`}>
+              {permission.data.authority.email}
+            </a>
+          </div>
+          <Divider />
+          <Conversation
+            permissionId={permission.data.id}
+            comments={permission.data.comments}
+            authority={permission.data.authority}
+            subscriber={permission.data.subscriber}
+          />
+        </div>
+      </>
     );
   }
 }

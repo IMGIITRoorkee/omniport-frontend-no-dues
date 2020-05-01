@@ -108,7 +108,10 @@ class HostelUploads extends Component {
             }
           >
             <Modal.Content>
-              <h3>Are you sure you want to continue?</h3>
+              <h3>
+                Make sure you have selected all the bhawans from the first to
+                the last semester.
+              </h3>
               <Grid centered celled="internally" columns={2}>
                 <Grid.Column
                   className={main["cancel-btn"]}

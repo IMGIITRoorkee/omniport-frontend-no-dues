@@ -7,6 +7,7 @@ import Permission from "./permission";
 import SubscriberDetail from "./subscriberDetail";
 
 import common from "../../css/common.css";
+import { Divider } from "semantic-ui-react";
 
 function MainComponent({ profile, match }) {
   return (
@@ -35,6 +36,7 @@ class Verifer extends Component {
             Authority: {profile.authority.fullName}
           </div>
         </div>
+        <Divider />
         <MainComponent profile={profile} match={match} />
       </div>
     );

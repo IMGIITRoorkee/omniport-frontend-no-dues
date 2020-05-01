@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import { Link, Route, Switch, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
-import { Button, Icon } from "semantic-ui-react";
+import { uploadIDCard } from "../../actions/uploadIDCard";
+
+import { Button, Icon, Divider } from "semantic-ui-react";
 
 import SubscriberHome from "./home";
 import IdentityCardUpload from "./identityCardUpload";
@@ -34,7 +36,7 @@ class Subscriber extends Component {
   fileInputRef = React.createRef();
 
   addIDCard = (e) => {
-    console.log(e.target.files[0]);
+    this.props.uploadIDCard(e.target.files[0]);
   };
 
   render() {
@@ -75,10 +77,19 @@ class Subscriber extends Component {
             />
           </div>
         </div>
+        <Divider />
         <MainComponent profile={profile} match={match} />
       </div>
     );
   }
 }
 
-export default connect(null, null)(Subscriber);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    uploadIDCard: (idCardFile) => {
+      dispatch(uploadIDCard(idCardFile));
+    },
+  };
+};
+
+export default connect(null, mapDispatchToProps)(Subscriber);

@@ -23,6 +23,11 @@ class App extends Component {
   render() {
     const creators = [
       {
+        name: "Praduman Goyal",
+        role: "Full Stack Developer",
+        link: "https://pradumangoyal.github.io/"
+      },
+      {
         name: "Drumil Patel",
         role: "Full Stack developer",
         link: "https://www.github.com/drumilpatel2000",

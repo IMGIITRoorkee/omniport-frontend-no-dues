@@ -36,7 +36,7 @@ const AppropriateStatusIcon = (status) => {
     case "app":
       return "check";
     case "nap":
-      return "cancel";
+      return "check";
     case "rep":
       return "warning sign";
     case "req":
@@ -49,7 +49,7 @@ const AppropriateStatusColor = (status) => {
     case "app":
       return "green";
     case "nap":
-      return "grey";
+      return "green";
     case "rep":
       return "yellow";
     case "req":

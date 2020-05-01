@@ -67,7 +67,6 @@ class SubscriberHome extends Component {
 
   render() {
     const { permissions, changeStatusDetails } = this.props;
-    console.log(permissions);
     if (permissions.isFetching) {
       return (
         <Dimmer active inverted>

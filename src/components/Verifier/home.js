@@ -102,17 +102,11 @@ class Home extends Component {
           enrollmentMassValue[item.subscriber.personEnrolment] = false;
           statusChangeValue[item.id] = "";
         }
-        console.log(enrollmentMassValue, statusChangeValue);
 
-        this.setState(
-          {
-            enrollmentMass: enrollmentMassValue,
-            statusChange: statusChangeValue,
-          },
-          () => {
-            console.log(this.state);
-          }
-        );
+        this.setState({
+          enrollmentMass: enrollmentMassValue,
+          statusChange: statusChangeValue,
+        });
       }
     }
   }
@@ -153,13 +147,11 @@ class Home extends Component {
 
   checkboxOnClick = (enrollmentNo) => {
     let { enrollmentMass } = this.state;
-    console.log(enrollmentNo);
     enrollmentMass[enrollmentNo] = !enrollmentMass[enrollmentNo];
     this.setState({ enrollmentMass });
   };
 
   statusChangeAction = (permissionId, newStatus) => {
-    console.log(permissionId);
     let { statusChange } = this.state;
     statusChange[permissionId] = newStatus;
     this.setState({ statusChange });
@@ -307,9 +299,18 @@ class Home extends Component {
                 {presentFilter === "pen" && (
                   <Dropdown>
                     <Dropdown.Menu>
-                      <Dropdown.Item onClick={this.onPendingClick} text="Pending" />
-                      <Dropdown.Item onClick={this.onReportedClick} text="Reported" />
-                      <Dropdown.Item onClick={this.onRequestClick} text="Requested" />
+                      <Dropdown.Item
+                        onClick={this.onPendingClick}
+                        text="Pending"
+                      />
+                      <Dropdown.Item
+                        onClick={this.onReportedClick}
+                        text="Reported"
+                      />
+                      <Dropdown.Item
+                        onClick={this.onRequestClick}
+                        text="Requested"
+                      />
                     </Dropdown.Menu>
                   </Dropdown>
                 )}

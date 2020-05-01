@@ -26,7 +26,6 @@ function MainComponent({ profile, match }) {
 class Verifer extends Component {
   render() {
     const { profile, match } = this.props;
-    console.log(profile);
     return (
       <div className={common["main-div"]}>
         <div styleName="common.person-header">

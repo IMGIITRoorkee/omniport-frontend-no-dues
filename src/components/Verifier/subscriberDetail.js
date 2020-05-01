@@ -128,7 +128,6 @@ class SubscriberDetail extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
     studentDetail: state.getSubscriberDetail,
   };

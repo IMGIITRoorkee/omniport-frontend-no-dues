@@ -83,7 +83,7 @@ class SubscriberHome extends Component {
               <Table.HeaderCell textAlign="center" width={4}>
                 Status/Action
               </Table.HeaderCell>
-              <Table.HeaderCell>Comments</Table.HeaderCell>
+              <Table.HeaderCell textAlign="center" >Comments</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -98,7 +98,7 @@ class SubscriberHome extends Component {
                       status={item.status}
                     />
                   </Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell textAlign="center">
                     {item.status !== "nrq" && (
                       <Link to={urlPermissionView(item.id)}>
                         <Button icon="comments" primary />

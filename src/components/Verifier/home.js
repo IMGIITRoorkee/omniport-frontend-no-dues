@@ -27,7 +27,11 @@ import {
   massUpdateStatus,
 } from "../../actions/getPermissions";
 
-import { urlSubscriberDetail, urlPermissionView } from "../../urls";
+import {
+  urlSubscriberDetail,
+  urlPermissionView,
+  urlSearchedSubscriber,
+} from "../../urls";
 
 import main from "../../css/verifier.css";
 
@@ -340,7 +344,15 @@ class Home extends Component {
                     </Table.Cell>
                   )}
                   <Table.Cell>{item.subscriber.personName}</Table.Cell>
-                  <Table.Cell>{item.subscriber.personEnrolment}</Table.Cell>
+                  <Table.Cell>
+                    <Link
+                      to={urlSearchedSubscriber(
+                        item.subscriber.personEnrolment
+                      )}
+                    >
+                      {item.subscriber.personEnrolment}
+                    </Link>
+                  </Table.Cell>
                   <Table.Cell>{item.subscriber.personDegree}</Table.Cell>
                   <Table.Cell>{item.subscriber.personDepartment}</Table.Cell>
                   <Table.Cell textAlign="center">

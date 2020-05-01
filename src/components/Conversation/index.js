@@ -64,7 +64,7 @@ class Conversation extends Component {
               <div className={main["profile-pic"]}>
                 <DefaultDP
                   name={
-                    item.commenter.id === subscriber.person
+                    item.commenter.id === subscriber.personId
                       ? subscriber.personName
                       : authority.fullName
                   }
@@ -72,7 +72,7 @@ class Conversation extends Component {
               </div>
               <Comment.Content>
                 <Comment.Author>
-                  {item.commenter.id === subscriber.person
+                  {item.commenter.id === subscriber.personId
                     ? subscriber.personName
                     : authority.fullName}
                 </Comment.Author>

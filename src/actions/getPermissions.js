@@ -162,10 +162,17 @@ export const commentOnPermission = (
     axios
       .post(permissionCommentApi(), formData, { headers: headers })
       .then((res) => {
-        dispatch({
-          type: ADD_COMMENT_PERMISSION,
-          payload: res.data,
-        });
+        if (mark_reported) {
+          dispatch({
+            type: UPDATE_PERMISSION_STATUS,
+            payload: { status: "rep", permissionId },
+          });
+        } else {
+          dispatch({
+            type: ADD_COMMENT_PERMISSION,
+            payload: res.data,
+          });
+        }
       })
       .catch((err) => {
         console.log(err.response);

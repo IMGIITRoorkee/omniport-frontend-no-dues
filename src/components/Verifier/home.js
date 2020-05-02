@@ -11,10 +11,10 @@ import {
   Select,
   Dimmer,
   Loader,
-  ItemExtra,
   Header,
   Modal,
   Form,
+  TextArea,
   Dropdown,
 } from "semantic-ui-react";
 
@@ -25,6 +25,7 @@ import {
   getPermissionFilter,
   changeStatusDetails,
   massUpdateStatus,
+  commentOnPermission,
 } from "../../actions/getPermissions";
 
 import {
@@ -78,7 +79,13 @@ class Home extends Component {
     massApprovalModalOpen: false,
     massApprovalStatus: "",
     massApprovalCheckBox: false,
+    reportPermissionModalOpen: false,
+    reportPermissionId: "",
+    reportPermissionText: "",
+    reportPermissionAttachment: null,
   };
+
+  fileInputRef = React.createRef();
 
   onFilterClick = (filter) => {
     if (filter === "pen") {
@@ -161,17 +168,61 @@ class Home extends Component {
   };
 
   statusChangeAction = (permissionId, newStatus) => {
-    let { statusChange } = this.state;
-    statusChange[permissionId] = newStatus;
-    this.setState({ statusChange }, () => {
+    if (newStatus === "rep") {
+      this.setState({
+        reportPermissionModalOpen: true,
+        reportPermissionId: permissionId,
+      });
+    } else {
       let { statusChange } = this.state;
-      this.props.changeStatusDetails(
-        this.state.statusChange[permissionId],
-        permissionId
-      );
-      statusChange[permissionId] = "";
-      this.setState({ statusChange });
+      statusChange[permissionId] = newStatus;
+      this.setState({ statusChange }, () => {
+        let { statusChange } = this.state;
+        this.props.changeStatusDetails(
+          this.state.statusChange[permissionId],
+          permissionId
+        );
+        statusChange[permissionId] = "";
+        this.setState({ statusChange });
+      });
+    }
+  };
+
+  // Report modal
+  addReportAttachment = (e) => {
+    this.setState({
+      reportPermissionAttachment: e.target.files[0],
     });
+  };
+
+  cancelReport = () => {
+    this.setState({
+      reportPermissionAttachment: null,
+      reportPermissionId: "",
+      reportPermissionModalOpen: false,
+      reportPermissionText: "",
+    });
+  };
+
+  onChangeReportText = (e, { value }) => {
+    this.setState({
+      reportPermissionText: value,
+    });
+  };
+
+  onSubmitReport = () => {
+    const {
+      reportPermissionText,
+      reportPermissionId,
+      reportPermissionAttachment,
+    } = this.state;
+    this.props.commentOnPermission(
+      reportPermissionId,
+      reportPermissionText,
+      reportPermissionAttachment,
+      true
+    );
+    this.cancelReport();
   };
 
   onOpenMassApprovalModal = () => {
@@ -312,6 +363,42 @@ class Home extends Component {
             />
           </Modal.Actions>
         </Modal>
+        <Modal open={this.state.reportPermissionModalOpen}>
+          <Modal.Header>Report an Issue</Modal.Header>
+          <Modal.Content>
+            <Form>
+              <TextArea
+                onChange={this.onChangeReportText}
+                placeholder="raise an issue by commenting here"
+                value={this.state.reportPermissionText}
+              />
+            </Form>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button negative onClick={this.cancelReport} content="Cancel" />
+            {this.state.reportPermissionAttachment !== null && (
+              <Icon color="green" fitted size="large" name="check circle" />
+            )}
+            <Button
+              primary
+              content="Upload a attachment"
+              onClick={() => this.fileInputRef.current.click()}
+              icon="upload"
+            />
+            <input
+              ref={this.fileInputRef}
+              type="file"
+              hidden
+              onChange={this.addReportAttachment}
+            />
+            <Button
+              positive
+              onClick={this.onSubmitReport}
+              icon="paper plane"
+              content="Comment and Report"
+            />
+          </Modal.Actions>
+        </Modal>
         <Link to={urlSubscriberDetail()}>
           <Button icon="eye" floated="right" content="View Student Status" />
         </Link>
@@ -327,7 +414,11 @@ class Home extends Component {
               </Table.HeaderCell>
               <Table.HeaderCell>Name</Table.HeaderCell>
               <Table.HeaderCell>
-                Enrolment No. <Input onChange={this.onChangeEnrollmentNo} placeholder="Search with enrolment no." />
+                Enrolment No.{" "}
+                <Input
+                  onChange={this.onChangeEnrollmentNo}
+                  placeholder="Search with enrolment no."
+                />
               </Table.HeaderCell>
               <Table.HeaderCell>Branch</Table.HeaderCell>
               <Table.HeaderCell>Department</Table.HeaderCell>
@@ -454,6 +545,11 @@ const mapDispatchToProps = (dispatch) => {
     },
     massUpdateStatus: (enrollmentList, newStatus) => {
       dispatch(massUpdateStatus(enrollmentList, newStatus));
+    },
+    commentOnPermission: (permissionId, content, attachment, markReported) => {
+      dispatch(
+        commentOnPermission(permissionId, attachment, content, markReported)
+      );
     },
   };
 };

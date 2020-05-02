@@ -82,6 +82,7 @@ class Home extends Component {
     enrollmentNos: "",
     massApprovalModalOpen: false,
     massApprovalStatus: "",
+    massApprovalCheckBox: false,
   };
 
   onFilterClick = (filter) => {
@@ -115,10 +116,10 @@ class Home extends Component {
     }
   }
 
-  resetValue = () => {
+  resetValue = (required) => {
     let { enrollmentMass } = this.state;
     for (let key in enrollmentMass) {
-      enrollmentMass[key] = false;
+      enrollmentMass[key] = required;
     }
     this.setState({ enrollmentMass });
   };
@@ -155,6 +156,15 @@ class Home extends Component {
     this.setState({ enrollmentMass });
   };
 
+  massApprovalCheckBoxOnClick = () => {
+    this.setState(
+      { massApprovalCheckBox: !this.state.massApprovalCheckBox },
+      () => {
+        this.resetValue(this.state.massApprovalCheckBox);
+      }
+    );
+  };
+
   statusChangeAction = (permissionId, newStatus) => {
     let { statusChange } = this.state;
     statusChange[permissionId] = newStatus;
@@ -183,21 +193,28 @@ class Home extends Component {
 
   onPendingClick = () => {
     this.props.getPermissionFilter("req&status=rep");
+    this.resetValue(false);
+    this.setState({ massApprovalCheckBox: false });
   };
 
   onReportedClick = () => {
     this.props.getPermissionFilter("rep");
+    this.resetValue(false);
+    this.setState({ massApprovalCheckBox: false });
   };
 
   onRequestClick = () => {
     this.props.getPermissionFilter("req");
+    this.resetValue(false);
+    this.setState({ massApprovalCheckBox: false });
   };
 
   onCloseMassApprovalModal = () => {
     this.setState({
       massApprovalModalOpen: false,
     });
-    this.resetValue();
+    this.resetValue(false);
+    this.setState({ massApprovalCheckBox: false });
   };
 
   render() {
@@ -207,6 +224,7 @@ class Home extends Component {
       enrollmentMass,
       statusChange,
       massApprovalStatus,
+      massApprovalCheckBox,
     } = this.state;
 
     if (permissions.isFetching) {
@@ -291,7 +309,13 @@ class Home extends Component {
           <Table.Header>
             <Table.Row>
               {presentFilter !== "app" && presentFilter !== "nap" && (
-                <Table.HeaderCell></Table.HeaderCell>
+                <Table.HeaderCell>
+                  {" "}
+                  <Checkbox
+                    onChange={() => this.massApprovalCheckBoxOnClick()}
+                    checked={massApprovalCheckBox}
+                  />{" "}
+                </Table.HeaderCell>
               )}
               <Table.HeaderCell>Name</Table.HeaderCell>
               <Table.HeaderCell>Enrolment No.</Table.HeaderCell>

@@ -44,8 +44,8 @@ export function permissionListApi() {
   return `${urlBaseApi()}/permission`;
 }
 
-export function permissionListFilterApi(filter) {
-  return `${permissionListApi()}/?status=${filter}`;
+export function permissionListFilterApi(filter, enrolment_number="") {
+  return `${permissionListApi()}/?status=${filter}&search=${enrolment_number}`;
 }
 
 export function permissionDetailApi(id) {

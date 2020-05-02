@@ -62,20 +62,10 @@ class Conversation extends Component {
           return (
             <Comment className={main["comment"]}>
               <div className={main["profile-pic"]}>
-                <DefaultDP
-                  name={
-                    item.commenter.id === subscriber.personId
-                      ? subscriber.personName
-                      : authority.fullName
-                  }
-                />
+                <DefaultDP name={profile.data.personName} />
               </div>
               <Comment.Content>
-                <Comment.Author>
-                  {item.commenter.id === subscriber.personId
-                    ? subscriber.personName
-                    : authority.fullName}
-                </Comment.Author>
+                <Comment.Author>{profile.data.personName}</Comment.Author>
                 <Comment.Metadata>
                   {moment(item.datetimeCreated).fromNow()}
                 </Comment.Metadata>
@@ -105,20 +95,10 @@ class Conversation extends Component {
         })}
         <Comment className={main["comment"]}>
           <div className={main["profile-pic"]}>
-            <DefaultDP
-              name={
-                isVerifier(profile.data)
-                  ? profile.data.authority.fullName
-                  : profile.data.personName
-              }
-            />
+            <DefaultDP name={profile.data.personName} />
           </div>
           <Comment.Content className={main["comment-form"]}>
-            <Comment.Author>
-              {isVerifier(profile.data)
-                ? profile.data.authority.fullName
-                : profile.data.personName}
-            </Comment.Author>
+            <Comment.Author>{profile.data.personName}</Comment.Author>
             <Form>
               <TextArea value={this.state.text} onChange={this.changeText} />
               <div className={main["post-buttons"]}>

@@ -35,13 +35,15 @@ export const getPermissionList = () => {
   };
 };
 
-export const getPermissionFilter = (filter) => {
+export const getPermissionFilter = (filter, enrolment_numbers = "") => {
   return (dispatch) => {
-    dispatch({
-      type: GET_PERMISSION_FILTER_REQUEST,
-    });
+    if (enrolment_numbers === "") {
+      dispatch({
+        type: GET_PERMISSION_FILTER_REQUEST,
+      });
+    }
     axios
-      .get(permissionListFilterApi(filter))
+      .get(permissionListFilterApi(filter, enrolment_numbers))
       .then((res) => {
         dispatch({
           type: GET_PERMISSION_LIST,
@@ -139,7 +141,12 @@ export const changeStatusDetails = (new_status, permissionId) => {
   };
 };
 
-export const commentOnPermission = (permissionId, attachment, text) => {
+export const commentOnPermission = (
+  permissionId,
+  attachment,
+  text,
+  mark_reported = false
+) => {
   let headers = {
     "Content-Type": "multipart/form-data",
     "X-CSRFToken": getCookie("csrftoken"),
@@ -148,6 +155,7 @@ export const commentOnPermission = (permissionId, attachment, text) => {
     let formData = new FormData();
     formData.append("permission_id", permissionId);
     formData.append("text", text);
+    formData.append("mark_reported", mark_reported);
     if (attachment !== null) {
       formData.append("attachment", attachment);
     }

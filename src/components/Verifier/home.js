@@ -69,11 +69,6 @@ const statusOptions = [
   { key: "nap", value: "nap", text: "Not Applicable" },
 ];
 
-const massStatusOptions = [
-  { key: "app", value: "app", text: "Approved" },
-  { key: "nap", value: "nap", text: "Not Applicable" },
-];
-
 class Home extends Component {
   state = {
     enrollmentMass: {},
@@ -168,14 +163,15 @@ class Home extends Component {
   statusChangeAction = (permissionId, newStatus) => {
     let { statusChange } = this.state;
     statusChange[permissionId] = newStatus;
-    this.setState({ statusChange });
-  };
-
-  onStatusChange = (permissionId) => {
-    this.props.changeStatusDetails(
-      this.state.statusChange[permissionId],
-      permissionId
-    );
+    this.setState({ statusChange }, () => {
+      let { statusChange } = this.state;
+      this.props.changeStatusDetails(
+        this.state.statusChange[permissionId],
+        permissionId
+      );
+      statusChange[permissionId] = "";
+      this.setState({ statusChange });
+    });
   };
 
   onOpenMassApprovalModal = () => {
@@ -209,6 +205,16 @@ class Home extends Component {
     this.setState({ massApprovalCheckBox: false });
   };
 
+  onChangeEnrollmentNo = (e, { value }) => {
+    const { presentFilter } = this.state;
+
+    if (presentFilter === "pen") {
+      this.props.getPermissionFilter("req&status=rep", value);
+    } else {
+      this.props.getPermissionFilter(presentFilter, value);
+    }
+  };
+
   onCloseMassApprovalModal = () => {
     this.setState({
       massApprovalModalOpen: false,
@@ -240,7 +246,11 @@ class Home extends Component {
         <Button.Group className={main["white-bg"]} basic>
           <Button
             onClick={() => this.onFilterClick("pen")}
-            active={presentFilter === "pen"}
+            active={
+              presentFilter === "pen" ||
+              presentFilter === "rep" ||
+              presentFilter === "req"
+            }
           >
             Pending
           </Button>
@@ -284,7 +294,7 @@ class Home extends Component {
                   value={massApprovalStatus}
                   onChange={this.onMassApprovalStatus}
                   placeholder="New Status"
-                  options={massStatusOptions}
+                  options={statusOptions}
                 />
               </Form.Field>
             </Form>
@@ -308,44 +318,44 @@ class Home extends Component {
         <Table celled>
           <Table.Header>
             <Table.Row>
-              {presentFilter !== "app" && presentFilter !== "nap" && (
-                <Table.HeaderCell>
-                  {" "}
-                  <Checkbox
-                    onChange={() => this.massApprovalCheckBoxOnClick()}
-                    checked={massApprovalCheckBox}
-                  />{" "}
-                </Table.HeaderCell>
-              )}
+              <Table.HeaderCell>
+                {" "}
+                <Checkbox
+                  onChange={() => this.massApprovalCheckBoxOnClick()}
+                  checked={massApprovalCheckBox}
+                />{" "}
+              </Table.HeaderCell>
               <Table.HeaderCell>Name</Table.HeaderCell>
-              <Table.HeaderCell>Enrolment No.</Table.HeaderCell>
+              <Table.HeaderCell>
+                Enrolment No. <Input onChange={this.onChangeEnrollmentNo} placeholder="Search with enrolment no." />
+              </Table.HeaderCell>
               <Table.HeaderCell>Branch</Table.HeaderCell>
               <Table.HeaderCell>Department</Table.HeaderCell>
               <Table.HeaderCell>ID Card</Table.HeaderCell>
               <Table.HeaderCell>
                 Status{" "}
-                {presentFilter === "pen" && (
+                {(presentFilter === "pen" ||
+                  presentFilter === "rep" ||
+                  presentFilter === "req") && (
                   <Dropdown>
                     <Dropdown.Menu>
                       <Dropdown.Item
-                        onClick={this.onPendingClick}
+                        onClick={() => this.onFilterClick("pen")}
                         text="Pending"
                       />
                       <Dropdown.Item
-                        onClick={this.onReportedClick}
+                        onClick={() => this.onFilterClick("rep")}
                         text="Reported"
                       />
                       <Dropdown.Item
-                        onClick={this.onRequestClick}
+                        onClick={() => this.onFilterClick("req")}
                         text="Requested"
                       />
                     </Dropdown.Menu>
                   </Dropdown>
                 )}
               </Table.HeaderCell>
-              {presentFilter !== "app" && presentFilter !== "nap" && (
-                <Table.HeaderCell>Action</Table.HeaderCell>
-              )}
+              <Table.HeaderCell>Action</Table.HeaderCell>
               <Table.HeaderCell>Last Modified by</Table.HeaderCell>
               <Table.HeaderCell>Last Modified on</Table.HeaderCell>
               <Table.HeaderCell>Comments</Table.HeaderCell>
@@ -355,18 +365,14 @@ class Home extends Component {
             {permissions.data.map((item, key) => {
               return (
                 <Table.Row>
-                  {presentFilter !== "app" && presentFilter !== "nap" && (
-                    <Table.Cell>
-                      <Checkbox
-                        onChange={() =>
-                          this.checkboxOnClick(item.subscriber.personEnrolment)
-                        }
-                        checked={
-                          enrollmentMass[item.subscriber.personEnrolment]
-                        }
-                      />
-                    </Table.Cell>
-                  )}
+                  <Table.Cell>
+                    <Checkbox
+                      onChange={() =>
+                        this.checkboxOnClick(item.subscriber.personEnrolment)
+                      }
+                      checked={enrollmentMass[item.subscriber.personEnrolment]}
+                    />
+                  </Table.Cell>
                   <Table.Cell>{item.subscriber.personName}</Table.Cell>
                   <Table.Cell>
                     <Link
@@ -395,26 +401,17 @@ class Home extends Component {
                   <Table.Cell textAlign="center">
                     <StatusDetail status={item.status} />
                   </Table.Cell>
-                  {presentFilter !== "app" && presentFilter !== "nap" && (
-                    <Table.Cell textAlign="center">
-                      <Select
-                        value={statusChange[item.id]}
-                        onChange={(e, { value }) => {
-                          this.statusChangeAction(item.id, value);
-                        }}
-                        compact
-                        options={statusOptions}
-                        placeholder="New Status"
-                      />
-                      <Button
-                        onClick={() => this.onStatusChange(item.id)}
-                        type="submit"
-                        basic
-                      >
-                        Mark
-                      </Button>
-                    </Table.Cell>
-                  )}
+                  <Table.Cell textAlign="center">
+                    <Select
+                      value={statusChange[item.id]}
+                      onChange={(e, { value }) => {
+                        this.statusChangeAction(item.id, value);
+                      }}
+                      compact
+                      options={statusOptions}
+                      placeholder="New Status"
+                    />
+                  </Table.Cell>
                   <Table.Cell>
                     {item.lastModifiedBy !== null && item.lastModifiedBy}
                   </Table.Cell>
@@ -449,8 +446,8 @@ const mapDispatchToProps = (dispatch) => {
     getPermissionList: () => {
       dispatch(getPermissionList());
     },
-    getPermissionFilter: (filter) => {
-      dispatch(getPermissionFilter(filter));
+    getPermissionFilter: (filter, enrolment_no = "") => {
+      dispatch(getPermissionFilter(filter, enrolment_no));
     },
     changeStatusDetails: (permissionId, newStatus) => {
       dispatch(changeStatusDetails(permissionId, newStatus));

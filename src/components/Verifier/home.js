@@ -403,14 +403,6 @@ class Home extends Component {
               <Table.HeaderCell>Name</Table.HeaderCell>
               <Table.HeaderCell>
                 Enrolment No.{" "}
-                <Input
-                  onChange={debounce(
-                    (e, { name, value }) =>
-                      this.onChangeEnrollmentNo(name, value),
-                    500
-                  )}
-                  placeholder="Search with enrolment no."
-                />
               </Table.HeaderCell>
               <Table.HeaderCell>Branch</Table.HeaderCell>
               <Table.HeaderCell>Department</Table.HeaderCell>
@@ -442,6 +434,29 @@ class Home extends Component {
               <Table.HeaderCell>Last Modified by</Table.HeaderCell>
               <Table.HeaderCell>Last Modified on</Table.HeaderCell>
               <Table.HeaderCell>Comments</Table.HeaderCell>
+            </Table.Row>
+            <Table.Row>
+              <Table.HeaderCell></Table.HeaderCell>
+              <Table.HeaderCell></Table.HeaderCell>
+              <Table.HeaderCell>
+                <Input
+                  onChange={debounce(
+                    (e, { name, value }) =>
+                      this.onChangeEnrollmentNo(name, value),
+                    500
+                  )}
+                  placeholder="Search with enrolment number"
+                  fluid
+                />
+              </Table.HeaderCell>
+              <Table.HeaderCell></Table.HeaderCell>
+              <Table.HeaderCell></Table.HeaderCell>
+              <Table.HeaderCell></Table.HeaderCell>
+              <Table.HeaderCell></Table.HeaderCell>
+              <Table.HeaderCell></Table.HeaderCell>
+              <Table.HeaderCell></Table.HeaderCell>
+              <Table.HeaderCell></Table.HeaderCell>
+              <Table.HeaderCell></Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>

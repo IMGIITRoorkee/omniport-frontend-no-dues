@@ -9,7 +9,7 @@ import SubscriberDetail from "./subscriberDetail";
 import common from "../../css/common.css";
 import { Divider } from "semantic-ui-react";
 
-function MainComponent({ profile, match }) {
+function MainComponent({ match }) {
   return (
     <Switch>
       <Route exact path={`${match.path}`} component={VeriferHome} />
@@ -30,7 +30,7 @@ class Verifer extends Component {
       <div className={common["main-div"]}>
         <div styleName="common.person-header">
           <div styleName="common.person-detail">
-            Name: {profile.person.fullName}
+            Name: {profile.personName}
             <br />
             Authority: {profile.authority.fullName}
           </div>

@@ -59,13 +59,14 @@ class Conversation extends Component {
     return (
       <Comment.Group size="large">
         {comments.map((item, key) => {
+          console.log(item);
           return (
             <Comment className={main["comment"]}>
               <div className={main["profile-pic"]}>
-                <DefaultDP name={profile.data.personName} />
+                <DefaultDP name={item.commenter.fullName} />
               </div>
               <Comment.Content>
-                <Comment.Author>{profile.data.personName}</Comment.Author>
+                <Comment.Author>{item.commenter.fullName}</Comment.Author>
                 <Comment.Metadata>
                   {moment(item.datetimeCreated).fromNow()}
                 </Comment.Metadata>

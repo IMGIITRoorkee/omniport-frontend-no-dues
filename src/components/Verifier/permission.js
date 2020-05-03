@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
-import { Loader, Dimmer, Icon, Divider, Button } from "semantic-ui-react";
+import { Loader, Dimmer, Icon, Divider, Button, Header } from "semantic-ui-react";
 
 import {
   getPermissionDetail,
@@ -16,7 +17,6 @@ import Conversation from "../Conversation";
 
 import main from "../../css/verifier.css";
 import common from "../../css/common.css";
-import { Link } from "react-router-dom";
 
 export const AppropriateStatusName = (status) => {
   switch (status) {
@@ -85,7 +85,9 @@ class Permission extends Component {
       <>
         <div className={common["back-btn"]} >
           <Link to={urlHomeView()}>
-          <Button primary content="Back" icon="arrow left" />
+            <Header as='h4'>
+              <Icon name="arrow left" />Back
+            </Header>          
           </Link>
         </div>
         <div className={main["permission-chats"]}>
@@ -104,9 +106,9 @@ class Permission extends Component {
                 {permission.data.subscriber.personDepartment}
                 <br />
                 {permission.data.subscriber.idCard !== null && (
-                  <Link to={permission.data.subscriber.idCard}>
+                  <a href={permission.data.subscriber.idCard} target='_blank' >
                     View ID Card
-                  </Link>
+                  </a>
                 )}
               </div>
             </div>

@@ -59,7 +59,6 @@ class Conversation extends Component {
     return (
       <Comment.Group size="large">
         {comments.map((item, key) => {
-          console.log(item);
           return (
             <Comment className={main["comment"]}>
               <div className={main["profile-pic"]}>

@@ -30,12 +30,10 @@
 }
 
 .name-header {
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
+  margin-top: -1.25em;
 }
 
-.header-name-div > div {
+.hgader-name-div > div {
   margin-left: 7.5px;
 }
 

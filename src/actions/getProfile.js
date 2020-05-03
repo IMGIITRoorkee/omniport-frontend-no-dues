@@ -13,6 +13,5 @@ export const getProfile = () => {
           payload: res.data,
         });
       })
-      .catch((err) => console.log(err));
   };
 };

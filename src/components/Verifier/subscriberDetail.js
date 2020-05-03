@@ -42,7 +42,9 @@ class SubscriberDetail extends Component {
       <>
         <div className={common["back-btn"]}>
           <Link to={urlHomeView()}>
-            <Button primary content="Back" icon="arrow left" />
+            <Header as='h4'>
+              <Icon name="arrow left" />Back
+            </Header>
           </Link>
         </div>
         <div className={main["main-content"]}>

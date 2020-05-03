@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
-import { Loader, Dimmer, Icon, Divider, Button } from "semantic-ui-react";
+import { Loader, Dimmer, Icon, Divider, Button, Header } from "semantic-ui-react";
 
 import { getPermissionDetail } from "../../actions/getPermissions";
 
@@ -73,7 +73,9 @@ class SubscriberPermission extends Component {
       <>
         <div className={common["back-btn"]}>
           <Link to={urlHomeView()}>
-            <Button primary content="Back" icon="arrow left" />
+            <Header as='h4'>
+              <Icon name="arrow left" />Back
+            </Header>
           </Link>
         </div>
         <div className={main["permission-chats"]}>

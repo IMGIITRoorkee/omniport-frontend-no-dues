@@ -4,6 +4,7 @@
   align-items: center;
   justify-content: space-between;
   flex-flow: row wrap;
+  min-height: 5em;
 }
 
 .person-detail {

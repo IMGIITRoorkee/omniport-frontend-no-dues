@@ -17,7 +17,6 @@ export const getHostelOptions = () => {
           payload: res.data,
         });
       })
-      .catch((err) => console.log(err));
   };
 };
 
@@ -43,7 +42,6 @@ export const uploadHostelDetails = (hostels) => {
         });
       })
       .catch((err) => {
-        console.log("error", err);
         toast({
           type: "error",
           title: "Some error occurred, please try again",

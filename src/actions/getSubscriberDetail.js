@@ -14,6 +14,5 @@ export const getSubscriberdetail = (enrollmentNo) => {
           payload: res.data,
         });
       })
-      .catch((err) => console.log(err));
   };
 };

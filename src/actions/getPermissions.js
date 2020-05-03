@@ -31,7 +31,6 @@ export const getPermissionList = () => {
           payload: res.data,
         });
       })
-      .catch((err) => console.log(err));
   };
 };
 
@@ -50,7 +49,6 @@ export const getPermissionFilter = (filter, enrolment_numbers = "") => {
           payload: res.data,
         });
       })
-      .catch((err) => console.log(err));
   };
 };
 
@@ -64,7 +62,6 @@ export const getPermissionDetail = (permissionId) => {
           payload: res.data,
         });
       })
-      .catch((err) => console.log(err));
   };
 };
 
@@ -90,7 +87,6 @@ export const massUpdateStatus = (enrolmentList, newStatus) => {
         });
       })
       .catch((err) => {
-        console.log("error", err);
         toast({
           type: "error",
           title: "Some error occurred, please try again",
@@ -128,7 +124,6 @@ export const changeStatusDetails = (new_status, permissionId) => {
         });
       })
       .catch((err) => {
-        console.log("error", err);
         toast({
           type: "error",
           title: "Some error occurred, please try again",
@@ -175,7 +170,6 @@ export const commentOnPermission = (
         }
       })
       .catch((err) => {
-        console.log(err.response);
         toast({
           type: "error",
           title: "Some error occurred, please try again",

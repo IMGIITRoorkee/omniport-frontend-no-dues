@@ -54,7 +54,7 @@ const StatusDetail = ({ status }) => {
   } else if (status === "rep") {
     return (
       <Header as="h5" color="yellow">
-        <Icon fitted name="warning sign" size="tiny" color="yellow" /> Reported
+        <Icon fitted name="warning sign" size="tiny" color="yellow" /> Issue Raised
       </Header>
     );
   } else if (status === "req") {
@@ -68,7 +68,7 @@ const StatusDetail = ({ status }) => {
 
 const statusOptions = [
   { key: "app", value: "app", text: "Approved" },
-  { key: "rep", value: "rep", text: "Reported" },
+  { key: "rep", value: "rep", text: "Raise an Issue" },
   { key: "nap", value: "nap", text: "Not Applicable" },
 ];
 
@@ -397,7 +397,7 @@ class Home extends Component {
               positive
               onClick={this.onSubmitReport}
               icon="paper plane"
-              content="Comment and Report"
+              content="Comment and Raise Issue"
             />
           </Modal.Actions>
         </Modal>

@@ -54,7 +54,8 @@ const StatusDetail = ({ status }) => {
   } else if (status === "rep") {
     return (
       <Header as="h5" color="yellow">
-        <Icon fitted name="warning sign" size="tiny" color="yellow" /> Issue Raised
+        <Icon fitted name="warning sign" size="tiny" color="yellow" /> Issue
+        Raised
       </Header>
     );
   } else if (status === "req") {
@@ -75,7 +76,6 @@ const statusOptions = [
 class Home extends Component {
   state = {
     enrollmentMass: {},
-    statusChange: {},
     presentFilter: "pen",
     enrollmentNos: "",
     massApprovalModalOpen: false,
@@ -106,15 +106,12 @@ class Home extends Component {
     if (!this.props.permissions.isFetching) {
       if (prevProps.permissions.data !== this.props.permissions.data) {
         let enrollmentMassValue = {};
-        let statusChangeValue = {};
         for (let item of this.props.permissions.data) {
           enrollmentMassValue[item.subscriber.personEnrolment] = false;
-          statusChangeValue[item.id] = item.status;
         }
 
         this.setState({
           enrollmentMass: enrollmentMassValue,
-          statusChange: statusChangeValue,
         });
       }
     }
@@ -176,17 +173,7 @@ class Home extends Component {
         reportPermissionId: permissionId,
       });
     } else {
-      let { statusChange } = this.state;
-      statusChange[permissionId] = newStatus;
-      this.setState({ statusChange }, () => {
-        let { statusChange } = this.state;
-        this.props.changeStatusDetails(
-          this.state.statusChange[permissionId],
-          permissionId
-        );
-        statusChange[permissionId] = "";
-        this.setState({ statusChange });
-      });
+      this.props.changeStatusDetails(newStatus, permissionId);
     }
   };
 
@@ -281,7 +268,6 @@ class Home extends Component {
     const {
       presentFilter,
       enrollmentMass,
-      statusChange,
       massApprovalStatus,
       massApprovalCheckBox,
     } = this.state;
@@ -500,13 +486,14 @@ class Home extends Component {
                   </Table.Cell>
                   <Table.Cell textAlign="center">
                     <Select
-                      value={statusChange[item.id]}
+                      value={item.status}
                       onChange={(e, { value }) => {
                         this.statusChangeAction(item.id, value);
                       }}
-                      compact
                       options={statusOptions}
                       placeholder="New Status"
+                      selectOnNavigation={false}
+                      selectOnBlur={false}
                     />
                   </Table.Cell>
                   <Table.Cell>

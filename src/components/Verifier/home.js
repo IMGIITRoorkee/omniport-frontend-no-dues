@@ -68,7 +68,7 @@ const StatusDetail = ({ status }) => {
 
 const statusOptions = [
   { key: "app", value: "app", text: "Approved" },
-  { key: "rep", value: "rep", text: "Reported" },
+  { key: "rep", value: "rep", text: "Raise an issue" },
   { key: "nap", value: "nap", text: "Not Applicable" },
 ];
 
@@ -109,7 +109,7 @@ class Home extends Component {
         let statusChangeValue = {};
         for (let item of this.props.permissions.data) {
           enrollmentMassValue[item.subscriber.personEnrolment] = false;
-          statusChangeValue[item.id] = "";
+          statusChangeValue[item.id] = item.status;
         }
 
         this.setState({

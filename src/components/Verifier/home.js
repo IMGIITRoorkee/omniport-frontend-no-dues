@@ -20,6 +20,8 @@ import {
 
 import moment from "moment";
 
+import { debounce } from "lodash";
+
 import {
   getPermissionList,
   getPermissionFilter,
@@ -256,7 +258,7 @@ class Home extends Component {
     this.setState({ massApprovalCheckBox: false });
   };
 
-  onChangeEnrollmentNo = (e, { value }) => {
+  onChangeEnrollmentNo = (name, value) => {
     const { presentFilter } = this.state;
 
     if (presentFilter === "pen") {
@@ -416,7 +418,11 @@ class Home extends Component {
               <Table.HeaderCell>
                 Enrolment No.{" "}
                 <Input
-                  onChange={this.onChangeEnrollmentNo}
+                  onChange={debounce(
+                    (e, { name, value }) =>
+                      this.onChangeEnrollmentNo(name, value),
+                    500
+                  )}
                   placeholder="Search with enrolment no."
                 />
               </Table.HeaderCell>

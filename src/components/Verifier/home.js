@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-semantic-toasts";
 
 import {
   Button,
@@ -34,6 +36,7 @@ import {
   urlSubscriberDetail,
   urlPermissionView,
   urlSearchedSubscriber,
+  downloadSubscriberData,
 } from "../../urls";
 
 import main from "../../css/verifier.css";
@@ -85,6 +88,7 @@ class Home extends Component {
     reportPermissionId: "",
     reportPermissionText: "",
     reportPermissionAttachment: null,
+    downloading: false,
   };
 
   fileInputRef = React.createRef();
@@ -263,6 +267,39 @@ class Home extends Component {
     this.setState({ massApprovalCheckBox: false });
   };
 
+  downloadStudentData = () => {
+    this.setState({
+      downloading: true,
+    }, 
+    () => {
+      axios.get(downloadSubscriberData()).then(response => {
+      const filename = response.headers['content-disposition'].split(
+        'filename='
+      )[1]
+      const url = window.URL.createObjectURL(new Blob([response.data]))
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', filename)
+      document.body.appendChild(link)
+      link.click()
+      this.setState({
+        downloading: false
+      })
+    }).catch(() => {
+      toast({
+        type: "error",
+        title: "Some error occurred, while downloading",
+        animation: "fade up",
+        icon: "frown outline",
+        time: 4000,
+      });
+      this.setState({
+        downloading: false
+      })
+    })
+  })
+  }
+
   render() {
     const { permissions } = this.props;
     const {
@@ -270,6 +307,7 @@ class Home extends Component {
       enrollmentMass,
       massApprovalStatus,
       massApprovalCheckBox,
+      downloading,
     } = this.state;
 
     if (permissions.isFetching) {
@@ -306,6 +344,15 @@ class Home extends Component {
             Not Applicable
           </Button>
         </Button.Group>
+        <Button 
+          onClick={this.downloadStudentData}
+          icon="file excel" 
+          floated="right" 
+          content="Download Student Data" 
+          color='green'
+          disabled={downloading}
+          loading={downloading}
+        />
         <Modal
           onClose={this.onCloseMassApprovalModal}
           open={this.state.massApprovalModalOpen}

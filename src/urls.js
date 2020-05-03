@@ -56,8 +56,16 @@ export function permissionCommentApi() {
   return `${urlBaseApi()}/comment/`;
 }
 
+export function subscriberListApi() {
+  return `${urlBaseApi()}/subscriber/`;
+}
+
 export function subscriberDetailApi(enrollmentNo) {
-  return `${urlBaseApi()}/subscriber/${enrollmentNo}`;
+  return `${subscriberListApi()}${enrollmentNo}`;
+}
+
+export function downloadSubscriberData() {
+  return `${subscriberListApi()}?download=xlsx`;
 }
 
 // Post APIs
@@ -72,3 +80,4 @@ export function MassApprovalApi() {
 export function BhawanUploadApi() {
   return `${urlBaseApi()}/select_authorities/`;
 }
+

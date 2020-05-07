@@ -32,6 +32,8 @@ import {
   commentOnPermission,
 } from "../../actions/getPermissions";
 
+import { getNoDuesSubscriberList } from "../../actions/getNoDuesSubscriberList";
+
 import {
   urlSubscriberDetail,
   urlPermissionView,
@@ -94,6 +96,7 @@ class Home extends Component {
   fileInputRef = React.createRef();
 
   onFilterClick = (filter) => {
+    this.setState({ massApprovalCheckBox: false });
     if (filter === "pen") {
       this.props.getPermissionFilter("req&status=rep");
     } else {
@@ -267,41 +270,53 @@ class Home extends Component {
     this.setState({ massApprovalCheckBox: false });
   };
 
-  downloadStudentData = () => {
+  onClickNoDues = () => {
     this.setState({
-      downloading: true,
-    }, 
-    () => {
-      axios.get(downloadSubscriberData()).then(response => {
-      const filename = response.headers['content-disposition'].split(
-        'filename='
-      )[1]
-      const url = window.URL.createObjectURL(new Blob([response.data]))
-      const link = document.createElement('a')
-      link.href = url
-      link.setAttribute('download', filename)
-      document.body.appendChild(link)
-      link.click()
-      this.setState({
-        downloading: false
-      })
-    }).catch(() => {
-      toast({
-        type: "error",
-        title: "Some error occurred, while downloading",
-        animation: "fade up",
-        icon: "frown outline",
-        time: 4000,
-      });
-      this.setState({
-        downloading: false
-      })
-    })
-  })
-  }
+      presentFilter: "nodues",
+    });
+    this.props.getNoDuesSubscriberList();
+  };
+
+  downloadStudentData = () => {
+    this.setState(
+      {
+        downloading: true,
+      },
+      () => {
+        axios
+          .get(downloadSubscriberData())
+          .then((response) => {
+            const filename = response.headers["content-disposition"].split(
+              "filename="
+            )[1];
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", filename);
+            document.body.appendChild(link);
+            link.click();
+            this.setState({
+              downloading: false,
+            });
+          })
+          .catch(() => {
+            toast({
+              type: "error",
+              title: "Some error occurred, while downloading",
+              animation: "fade up",
+              icon: "frown outline",
+              time: 4000,
+            });
+            this.setState({
+              downloading: false,
+            });
+          });
+      }
+    );
+  };
 
   render() {
-    const { permissions } = this.props;
+    const { permissions, noDuesStudents } = this.props;
     const {
       presentFilter,
       enrollmentMass,
@@ -344,12 +359,12 @@ class Home extends Component {
             Not Applicable
           </Button>
         </Button.Group>
-        <Button 
+        <Button
           onClick={this.downloadStudentData}
-          icon="file excel" 
-          floated="right" 
-          content="Download Student Data" 
-          color='green'
+          icon="file excel"
+          floated="right"
+          content="Download Student Data"
+          color="green"
           disabled={downloading}
           loading={downloading}
         />
@@ -437,145 +452,202 @@ class Home extends Component {
         <Link to={urlSubscriberDetail()}>
           <Button icon="eye" floated="right" content="View Student Status" />
         </Link>
-        <Table celled>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>
-                {" "}
-                <Checkbox
-                  onChange={() => this.massApprovalCheckBoxOnClick()}
-                  checked={massApprovalCheckBox}
-                />{" "}
-              </Table.HeaderCell>
-              <Table.HeaderCell>Name</Table.HeaderCell>
-              <Table.HeaderCell>
-                Enrolment No.{" "}
-              </Table.HeaderCell>
-              <Table.HeaderCell>Branch</Table.HeaderCell>
-              <Table.HeaderCell>Department</Table.HeaderCell>
-              <Table.HeaderCell>ID Card</Table.HeaderCell>
-              <Table.HeaderCell>
-                Status{" "}
-                {(presentFilter === "pen" ||
-                  presentFilter === "rep" ||
-                  presentFilter === "req") && (
-                  <Dropdown>
-                    <Dropdown.Menu>
-                      <Dropdown.Item
-                        onClick={() => this.onFilterClick("pen")}
-                        text="Pending"
-                      />
-                      <Dropdown.Item
-                        onClick={() => this.onFilterClick("rep")}
-                        text="Reported"
-                      />
-                      <Dropdown.Item
-                        onClick={() => this.onFilterClick("req")}
-                        text="Requested"
-                      />
-                    </Dropdown.Menu>
-                  </Dropdown>
-                )}
-              </Table.HeaderCell>
-              <Table.HeaderCell>Action</Table.HeaderCell>
-              <Table.HeaderCell>Last Modified by</Table.HeaderCell>
-              <Table.HeaderCell>Last Modified on</Table.HeaderCell>
-              <Table.HeaderCell>Comments</Table.HeaderCell>
-            </Table.Row>
-            <Table.Row>
-              <Table.HeaderCell></Table.HeaderCell>
-              <Table.HeaderCell></Table.HeaderCell>
-              <Table.HeaderCell>
-                <Input
-                  onChange={debounce(
-                    (e, { name, value }) =>
-                      this.onChangeEnrollmentNo(name, value),
-                    500
-                  )}
-                  placeholder="Search with enrolment number"
-                  fluid
-                />
-              </Table.HeaderCell>
-              <Table.HeaderCell></Table.HeaderCell>
-              <Table.HeaderCell></Table.HeaderCell>
-              <Table.HeaderCell></Table.HeaderCell>
-              <Table.HeaderCell></Table.HeaderCell>
-              <Table.HeaderCell></Table.HeaderCell>
-              <Table.HeaderCell></Table.HeaderCell>
-              <Table.HeaderCell></Table.HeaderCell>
-              <Table.HeaderCell></Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {permissions.data.map((item, key) => {
-              return (
+        <Button
+          icon="check"
+          active={presentFilter === "nodues"}
+          floated="right"
+          content="No dues Students"
+          onClick={this.onClickNoDues}
+        />
+        {presentFilter === "nodues" ? (
+          <>
+            {noDuesStudents.isFetching && (
+              <Dimmer active inverted>
+                <Loader />
+              </Dimmer>
+            )}
+            <Table celled>
+              <Table.Header>
                 <Table.Row>
-                  <Table.Cell>
-                    <Checkbox
-                      onChange={() =>
-                        this.checkboxOnClick(item.subscriber.personEnrolment)
-                      }
-                      checked={enrollmentMass[item.subscriber.personEnrolment]}
-                    />
-                  </Table.Cell>
-                  <Table.Cell>{item.subscriber.personName}</Table.Cell>
-                  <Table.Cell>
-                    <Link
-                      to={urlSearchedSubscriber(
-                        item.subscriber.personEnrolment
-                      )}
-                    >
-                      {item.subscriber.personEnrolment}
-                    </Link>
-                  </Table.Cell>
-                  <Table.Cell>{item.subscriber.personDegree}</Table.Cell>
-                  <Table.Cell>{item.subscriber.personDepartment}</Table.Cell>
-                  <Table.Cell textAlign="center">
-                    {item.subscriber.idCard !== null && (
-                      <Link
-                        to={item.subscriber.idCard}
-                        onClick={(event) => {
-                          event.preventDefault();
-                          window.open(item.subscriber.idCard);
-                        }}
-                      >
-                        <Icon name="eye" size="large" />
-                      </Link>
-                    )}
-                  </Table.Cell>
-                  <Table.Cell textAlign="center">
-                    <StatusDetail status={item.status} />
-                  </Table.Cell>
-                  <Table.Cell textAlign="center">
-                    <Select
-                      value={item.status}
-                      onChange={(e, { value }) => {
-                        this.statusChangeAction(item.id, value);
-                      }}
-                      options={statusOptions}
-                      placeholder="New Status"
-                      selectOnNavigation={false}
-                      selectOnBlur={false}
-                    />
-                  </Table.Cell>
-                  <Table.Cell>
-                    {item.lastModifiedBy !== null && item.lastModifiedBy}
-                  </Table.Cell>
-                  <Table.Cell>
-                    {moment(item.datetimeModified).format(
-                      "Do MMMM YYYY, h:mm a"
-                    )}
-                  </Table.Cell>
-                  <Table.Cell textAlign="center">
-                    <Link to={urlPermissionView(item.id)}>
-                      <Button icon="comments" primary />
-                    </Link>
-                  </Table.Cell>
+                  <Table.HeaderCell>Name</Table.HeaderCell>
+                  <Table.HeaderCell>Enrolment No. </Table.HeaderCell>
+                  <Table.HeaderCell>Branch</Table.HeaderCell>
+                  <Table.HeaderCell>Department</Table.HeaderCell>
+                  <Table.HeaderCell>ID Card</Table.HeaderCell>
                 </Table.Row>
-              );
-            })}
-          </Table.Body>
-        </Table>
+              </Table.Header>
+              <Table.Body>
+                {noDuesStudents.data.map((item, key) => {
+                  return (
+                    <Table.Row>
+                      <Table.Cell>{item.personName}</Table.Cell>
+                      <Table.Cell>
+                        <Link to={urlSearchedSubscriber(item.personEnrolment)}>
+                          {item.personEnrolment}
+                        </Link>
+                      </Table.Cell>
+                      <Table.Cell>{item.personDegree}</Table.Cell>
+                      <Table.Cell>{item.personDepartment}</Table.Cell>
+                      <Table.Cell textAlign="center">
+                        {item.idCard !== null && (
+                          <Link
+                            to={item.idCard}
+                            onClick={(event) => {
+                              event.preventDefault();
+                              window.open(item.idCard);
+                            }}
+                          >
+                            <Icon name="eye" size="large" />
+                          </Link>
+                        )}
+                      </Table.Cell>
+                    </Table.Row>
+                  );
+                })}
+              </Table.Body>
+            </Table>
+          </>
+        ) : (
+          <Table celled>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>
+                  {" "}
+                  <Checkbox
+                    onChange={() => this.massApprovalCheckBoxOnClick()}
+                    checked={massApprovalCheckBox}
+                  />{" "}
+                </Table.HeaderCell>
+                <Table.HeaderCell>Name</Table.HeaderCell>
+                <Table.HeaderCell>Enrolment No. </Table.HeaderCell>
+                <Table.HeaderCell>Branch</Table.HeaderCell>
+                <Table.HeaderCell>Department</Table.HeaderCell>
+                <Table.HeaderCell>ID Card</Table.HeaderCell>
+                <Table.HeaderCell>
+                  Status{" "}
+                  {(presentFilter === "pen" ||
+                    presentFilter === "rep" ||
+                    presentFilter === "req") && (
+                    <Dropdown>
+                      <Dropdown.Menu>
+                        <Dropdown.Item
+                          onClick={() => this.onFilterClick("pen")}
+                          text="Pending"
+                        />
+                        <Dropdown.Item
+                          onClick={() => this.onFilterClick("rep")}
+                          text="Reported"
+                        />
+                        <Dropdown.Item
+                          onClick={() => this.onFilterClick("req")}
+                          text="Requested"
+                        />
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  )}
+                </Table.HeaderCell>
+                <Table.HeaderCell>Action</Table.HeaderCell>
+                <Table.HeaderCell>Last Modified by</Table.HeaderCell>
+                <Table.HeaderCell>Last Modified on</Table.HeaderCell>
+                <Table.HeaderCell>Comments</Table.HeaderCell>
+              </Table.Row>
+              <Table.Row>
+                <Table.HeaderCell></Table.HeaderCell>
+                <Table.HeaderCell></Table.HeaderCell>
+                <Table.HeaderCell>
+                  <Input
+                    onChange={debounce(
+                      (e, { name, value }) =>
+                        this.onChangeEnrollmentNo(name, value),
+                      500
+                    )}
+                    placeholder="Search with enrolment number"
+                    fluid
+                  />
+                </Table.HeaderCell>
+                <Table.HeaderCell></Table.HeaderCell>
+                <Table.HeaderCell></Table.HeaderCell>
+                <Table.HeaderCell></Table.HeaderCell>
+                <Table.HeaderCell></Table.HeaderCell>
+                <Table.HeaderCell></Table.HeaderCell>
+                <Table.HeaderCell></Table.HeaderCell>
+                <Table.HeaderCell></Table.HeaderCell>
+                <Table.HeaderCell></Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {permissions.data.map((item, key) => {
+                return (
+                  <Table.Row>
+                    <Table.Cell>
+                      <Checkbox
+                        onChange={() =>
+                          this.checkboxOnClick(item.subscriber.personEnrolment)
+                        }
+                        checked={
+                          enrollmentMass[item.subscriber.personEnrolment]
+                        }
+                      />
+                    </Table.Cell>
+                    <Table.Cell>{item.subscriber.personName}</Table.Cell>
+                    <Table.Cell>
+                      <Link
+                        to={urlSearchedSubscriber(
+                          item.subscriber.personEnrolment
+                        )}
+                      >
+                        {item.subscriber.personEnrolment}
+                      </Link>
+                    </Table.Cell>
+                    <Table.Cell>{item.subscriber.personDegree}</Table.Cell>
+                    <Table.Cell>{item.subscriber.personDepartment}</Table.Cell>
+                    <Table.Cell textAlign="center">
+                      {item.subscriber.idCard !== null && (
+                        <Link
+                          to={item.subscriber.idCard}
+                          onClick={(event) => {
+                            event.preventDefault();
+                            window.open(item.subscriber.idCard);
+                          }}
+                        >
+                          <Icon name="eye" size="large" />
+                        </Link>
+                      )}
+                    </Table.Cell>
+                    <Table.Cell textAlign="center">
+                      <StatusDetail status={item.status} />
+                    </Table.Cell>
+                    <Table.Cell textAlign="center">
+                      <Select
+                        value={item.status}
+                        onChange={(e, { value }) => {
+                          this.statusChangeAction(item.id, value);
+                        }}
+                        options={statusOptions}
+                        placeholder="New Status"
+                        selectOnNavigation={false}
+                        selectOnBlur={false}
+                      />
+                    </Table.Cell>
+                    <Table.Cell>
+                      {item.lastModifiedBy !== null && item.lastModifiedBy}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {moment(item.datetimeModified).format(
+                        "Do MMMM YYYY, h:mm a"
+                      )}
+                    </Table.Cell>
+                    <Table.Cell textAlign="center">
+                      <Link to={urlPermissionView(item.id)}>
+                        <Button icon="comments" primary />
+                      </Link>
+                    </Table.Cell>
+                  </Table.Row>
+                );
+              })}
+            </Table.Body>
+          </Table>
+        )}
       </div>
     );
   }
@@ -584,6 +656,7 @@ class Home extends Component {
 const mapStateToProps = (state) => {
   return {
     permissions: state.getPermissionList,
+    noDuesStudents: state.getNoDuesSubscriberList,
   };
 };
 
@@ -600,6 +673,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     massUpdateStatus: (enrollmentList, newStatus) => {
       dispatch(massUpdateStatus(enrollmentList, newStatus));
+    },
+    getNoDuesSubscriberList: () => {
+      dispatch(getNoDuesSubscriberList());
     },
     commentOnPermission: (permissionId, content, attachment, markReported) => {
       dispatch(

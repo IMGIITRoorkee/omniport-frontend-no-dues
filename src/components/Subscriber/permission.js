@@ -2,7 +2,14 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
-import { Loader, Dimmer, Icon, Divider, Button, Header } from "semantic-ui-react";
+import {
+  Loader,
+  Dimmer,
+  Icon,
+  Divider,
+  Button,
+  Header,
+} from "semantic-ui-react";
 
 import { getPermissionDetail } from "../../actions/getPermissions";
 
@@ -73,8 +80,9 @@ class SubscriberPermission extends Component {
       <>
         <div className={common["back-btn"]}>
           <Link to={urlHomeView()}>
-            <Header as='h4'>
-              <Icon name="arrow left" />Back
+            <Header as="h4">
+              <Icon name="arrow left" />
+              Back
             </Header>
           </Link>
         </div>
@@ -91,9 +99,6 @@ class SubscriberPermission extends Component {
                   {AppropriateStatusName(permission.data.status)}{" "}
                   {permission.data.authority.fullName}
                 </h2>
-                <div className={main["gray-text"]}>
-                  {permission.data.authority.description}
-                </div>
               </div>
             </div>
             <a href={`mailto:${permission.data.authority.email}`}>

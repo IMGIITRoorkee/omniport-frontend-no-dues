@@ -1,5 +1,5 @@
 .person-header {
-  padding: 2rem 4rem 1rem 4rem;
+  padding: 2rem 4rem 2rem 4rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -18,7 +18,7 @@
 }
 
 .upload {
-padding-top: 15px;
+  padding-top: 15px;
   display: flex;
   flex-flow: row wrap;
   align-items: center;
@@ -30,11 +30,13 @@ padding-top: 15px;
 }
 
 .main-div {
-  display: flex;
-  flex-direction: column;
   height: 100%;
 }
 
+.common-divider {
+  margin: 0 !important;
+}
+
 .back-btn {
-  margin: 1rem 0 0 1rem;
+  margin: 1rem 0 0 2rem;
 }

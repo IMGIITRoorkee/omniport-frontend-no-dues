@@ -2,16 +2,21 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
-import { Loader, Dimmer, Icon, Divider, Button, Header } from "semantic-ui-react";
+import {
+  Loader,
+  Dimmer,
+  Icon,
+  Divider,
+  Button,
+  Header,
+} from "semantic-ui-react";
 
 import {
   getPermissionDetail,
   changeStatusDetails,
 } from "../../actions/getPermissions";
 
-import {
-  urlHomeView
-} from "../../urls"
+import { urlHomeView } from "../../urls";
 
 import Conversation from "../Conversation";
 
@@ -83,33 +88,41 @@ class Permission extends Component {
     }
     return (
       <>
-        <div className={common["back-btn"]} >
+        <div className={common["back-btn"]}>
           <Link to={urlHomeView()}>
-            <Header as='h4'>
-              <Icon name="arrow left" />Back
-            </Header>          
+            <Header as="h4">
+              <Icon name="arrow left" />
+              Back
+            </Header>
           </Link>
         </div>
         <div className={main["permission-chats"]}>
           <div className={main["name-header"]}>
-            <div className={main["header-name-div"]}>
-              <Icon
-                color={AppropriateStatusColor(permission.data.status)}
-                name={AppropriateStatusIcon(permission.data.status)}
-                size="large"
-              />
-              <div className={[common["person-detail"], common["sub-details"]].join(" ")}>
-                <h2>{AppropriateStatusName(permission.data.status)}</h2>
-                {permission.data.subscriber.personName}
-                <br />
-                {permission.data.subscriber.personDegree}{" "}
-                {permission.data.subscriber.personDepartment}
-                <br />
-                {permission.data.subscriber.idCard !== null && (
-                  <a href={permission.data.subscriber.idCard} target='_blank' >
-                    View ID Card
-                  </a>
-                )}
+            <div>
+              <div className={main["header-name-div"]}>
+                <Icon
+                  color={AppropriateStatusColor(permission.data.status)}
+                  name={AppropriateStatusIcon(permission.data.status)}
+                  size="large"
+                />
+                <div
+                  className={[
+                    common["person-detail"],
+                    common["sub-details"],
+                  ].join(" ")}
+                >
+                  <h2>{AppropriateStatusName(permission.data.status)}</h2>
+                  {permission.data.subscriber.personName}
+                  <br />
+                  {permission.data.subscriber.personDegree}{" "}
+                  {permission.data.subscriber.personDepartment}
+                  <br />
+                  {permission.data.subscriber.idCard !== null && (
+                    <a href={permission.data.subscriber.idCard} target="_blank">
+                      View ID Card
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
             {permission.data.status !== "app" &&

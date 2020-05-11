@@ -10,7 +10,14 @@ import moment from "moment";
 import { DefaultDP } from "formula_one";
 
 import { commentOnPermission } from "../../actions/getPermissions";
-import { Icon, Form, TextArea, Button, Comment } from "semantic-ui-react";
+import {
+  Icon,
+  Form,
+  TextArea,
+  Button,
+  Comment,
+  Label,
+} from "semantic-ui-react";
 
 import { isVerifier } from "../../utils/userRole";
 
@@ -56,6 +63,7 @@ class Conversation extends Component {
 
   render() {
     const { comments, authority, subscriber, profile } = this.props;
+    console.log();
     return (
       <Comment.Group size="large">
         {comments.map((item, key) => {
@@ -103,13 +111,19 @@ class Conversation extends Component {
               <TextArea value={this.state.text} onChange={this.changeText} />
               <div className={main["post-buttons"]}>
                 {this.state.attachment !== null && (
-                  <Icon color="green" size="large" name="check circle" />
+                  <Label>
+                    {this.state.attachment.name}
+                    <Icon
+                      name="delete"
+                      onClick={() => this.setState({ attachment: null })}
+                    />
+                  </Label>
                 )}
                 <Button
                   primary
                   onClick={() => this.fileInputRef.current.click()}
                 >
-                  <Icon name="upload" /> Upload a file
+                  <Icon name="upload" /> Attach
                 </Button>
                 <input
                   ref={this.fileInputRef}
@@ -118,7 +132,7 @@ class Conversation extends Component {
                   onChange={this.addAttachement}
                 />
                 <Button onClick={this.postComment} positive>
-                  <Icon name="paper plane" /> Send
+                  <Icon name="paper plane" /> Submit
                 </Button>
               </div>
             </Form>

@@ -35,7 +35,7 @@ class Verifer extends Component {
             Authority: {profile.authority.fullName}
           </div>
         </div>
-        <Divider />
+        <Divider styleName="common.common-divider" />
         <MainComponent profile={profile} match={match} />
       </div>
     );

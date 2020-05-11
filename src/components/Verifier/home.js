@@ -52,7 +52,7 @@ const StatusDetail = ({ status }) => {
     );
   } else if (status === "nap") {
     return (
-      <Header as="h5" color="grey">
+      <Header as="h5" color="green">
         Not Applicable
       </Header>
     );
@@ -561,6 +561,7 @@ class Home extends Component {
                         this.onChangeEnrollmentNo(name, value),
                       500
                     )}
+                    icon="search"
                     placeholder="Search with enrolment number"
                     fluid
                   />
@@ -577,6 +578,7 @@ class Home extends Component {
             </Table.Header>
             <Table.Body>
               {permissions.data.map((item, key) => {
+                console.log(item);
                 return (
                   <Table.Row>
                     <Table.Cell>
@@ -641,6 +643,11 @@ class Home extends Component {
                       <Link to={urlPermissionView(item.id)}>
                         <Button icon="comments" primary />
                       </Link>
+                      {item.latestCommentBy === "subscriber" && (
+                        <Header as="h5" style={{ marginTop: 10 }} color="red">
+                          Unreaded comments
+                        </Header>
+                      )}
                     </Table.Cell>
                   </Table.Row>
                 );

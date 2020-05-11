@@ -77,7 +77,7 @@ class Subscriber extends Component {
             />
           </div>
         </div>
-        <Divider />
+        <Divider styleName="common.common-divider" />
         <MainComponent profile={profile} match={match} />
       </div>
     );

@@ -5,7 +5,10 @@ import moment from "moment";
 
 import { Input, Button, Icon, Header, Table, Tab } from "semantic-ui-react";
 
-import { getSubscriberdetail } from "../../actions/getSubscriberDetail";
+import {
+  getSubscriberdetail,
+  errorInEnrollment,
+} from "../../actions/getSubscriberDetail";
 
 import { urlHomeView, urlSearchedSubscriber } from "../../urls";
 
@@ -42,8 +45,9 @@ class SubscriberDetail extends Component {
       <>
         <div className={common["back-btn"]}>
           <Link to={urlHomeView()}>
-            <Header as='h4'>
-              <Icon name="arrow left" />Back
+            <Header as="h4">
+              <Icon name="arrow left" />
+              Back
             </Header>
           </Link>
         </div>

@@ -8,6 +8,9 @@ import {
   Icon,
   Button,
   Popup,
+  Modal,
+  Label,
+  Segment,
 } from "semantic-ui-react";
 
 import { connect } from "react-redux";
@@ -21,16 +24,89 @@ import {
 
 import main from "../../css/subscriber.css";
 
-const StatusBtn = ({ status, changeStatus, permissionId }) => {
+class AskForApprovalBtn extends Component {
+  state = {
+    modalOpen: false,
+    loading: false,
+  };
+
+  openModal = () => {
+    this.setState({ modalOpen: true });
+  };
+
+  closeModal = () => {
+    this.setState({
+      modalOpen: false,
+    });
+  };
+
+  proceedApproval = () => {
+    this.setState(
+      {
+        loading: true,
+      },
+      () => {
+        this.props.changeStatus("req", this.props.permissionId);
+        this.setState({
+          loading: false,
+        });
+        this.closeModal();
+      }
+    );
+  };
+
+  render() {
+    if (this.props.description === "") {
+      return (
+        <Button
+          loading={this.state.loading}
+          onClick={this.proceedApproval}
+          basic
+          color="grey"
+        >
+          <Icon name="paper plane" /> Ask For Approval
+        </Button>
+      );
+    } else {
+      return (
+        <Modal
+          trigger={
+            <Button
+              loading={this.state.loading}
+              onClick={this.openModal}
+              basic
+              color="grey"
+            >
+              <Icon name="paper plane" /> Ask For Approval
+            </Button>
+          }
+          open={this.state.modalOpen}
+        >
+          <Modal.Header>Ask For Approval</Modal.Header>
+          <Modal.Content>{this.props.description}</Modal.Content>
+          <Modal.Actions>
+            <Button onClick={this.closeModal} content="Cancel" negative />
+            <Button
+              onClick={this.proceedApproval}
+              content="Proceed"
+              loading={this.state.loading}
+              positive
+            />
+          </Modal.Actions>
+        </Modal>
+      );
+    }
+  }
+}
+
+const StatusBtn = ({ status, changeStatus, permissionId, description }) => {
   if (status === "nrq") {
     return (
-      <Button
-        onClick={() => changeStatus("req", permissionId)}
-        basic
-        color="grey"
-      >
-        <Icon name="paper plane" /> Ask For Approval
-      </Button>
+      <AskForApprovalBtn
+        changeStatus={changeStatus}
+        permissionId={permissionId}
+        description={description}
+      />
     );
   } else if (status === "req") {
     return (
@@ -53,7 +129,7 @@ const StatusBtn = ({ status, changeStatus, permissionId }) => {
     );
   } else if (status === "nap") {
     return (
-      <Header as="h5" color="grey">
+      <Header as="h5" color="green">
         <Icon fitted name="check" size="tiny" color="green" /> Not Applicable
       </Header>
     );
@@ -79,11 +155,13 @@ class SubscriberHome extends Component {
         <Table size="large" singleLine>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell width={12}>Authority</Table.HeaderCell>
+              <Table.HeaderCell width={10}>Authority</Table.HeaderCell>
               <Table.HeaderCell textAlign="center" width={4}>
                 Status/Action
               </Table.HeaderCell>
-              <Table.HeaderCell textAlign="center" >Comments</Table.HeaderCell>
+              <Table.HeaderCell width={2} textAlign="center">
+                Comments
+              </Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -96,13 +174,21 @@ class SubscriberHome extends Component {
                       permissionId={item.id}
                       changeStatus={changeStatusDetails}
                       status={item.status}
+                      description={item.authority.description}
                     />
                   </Table.Cell>
                   <Table.Cell textAlign="center">
                     {item.status !== "nrq" && (
-                      <Link to={urlPermissionView(item.id)}>
-                        <Button icon="comments" primary />
-                      </Link>
+                      <>
+                        <Link to={urlPermissionView(item.id)}>
+                          <Button icon="comments" primary />
+                        </Link>
+                        {item.latestCommentBy === "verifier" && (
+                          <Header as="h5" style={{ marginTop: 10 }} color="red">
+                            Unreaded comments
+                          </Header>
+                        )}
+                      </>
                     )}
                   </Table.Cell>
                 </Table.Row>

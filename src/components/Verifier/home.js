@@ -377,25 +377,25 @@ class Home extends Component {
               icon="group"
               floated="right"
               primary
-              content="Mass Approval"
+              content="Mass Update"
             />
           }
         >
-          <Modal.Header>Mass Approval</Modal.Header>
+          <Modal.Header>Mass Update</Modal.Header>
           <Modal.Content>
             <Form>
               <Form.TextArea
                 onChange={this.onEnrollmentNosChange}
                 value={this.state.enrollmentNos}
-                label="Enrollment Nos"
+                label="Enrollment Numbers"
               />
               <Form.Field inline>
-                <label>Mass Status</label>
+                <label>Status</label>
                 <Form.Select
                   value={massApprovalStatus}
                   onChange={this.onMassApprovalStatus}
                   placeholder="New Status"
-                  options={statusOptions}
+                  options={statusOptions.filter(x => x.key!=='rep')}
                 />
               </Form.Field>
             </Form>
@@ -414,12 +414,12 @@ class Home extends Component {
           </Modal.Actions>
         </Modal>
         <Modal open={this.state.reportPermissionModalOpen}>
-          <Modal.Header>Report an Issue</Modal.Header>
+          <Modal.Header>Raise an Issue</Modal.Header>
           <Modal.Content>
             <Form>
               <TextArea
                 onChange={this.onChangeReportText}
-                placeholder="raise an issue by commenting here"
+                placeholder="Raise an issue by commenting here"
                 value={this.state.reportPermissionText}
               />
             </Form>
@@ -431,7 +431,7 @@ class Home extends Component {
             )}
             <Button
               primary
-              content="Upload a attachment"
+              content="Upload an attachment"
               onClick={() => this.fileInputRef.current.click()}
               icon="upload"
             />

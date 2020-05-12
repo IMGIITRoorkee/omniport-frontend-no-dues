@@ -27,6 +27,7 @@ class Conversation extends Component {
   state = {
     text: "",
     attachment: null,
+    commenting: false,
   };
 
   componentDidMount() {
@@ -62,8 +63,13 @@ class Conversation extends Component {
   };
 
   render() {
-    const { comments, authority, subscriber, profile } = this.props;
-    console.log();
+    const {
+      comments,
+      authority,
+      isCommenting,
+      subscriber,
+      profile,
+    } = this.props;
     return (
       <Comment.Group size="large">
         {comments.map((item, key) => {
@@ -131,7 +137,12 @@ class Conversation extends Component {
                   hidden
                   onChange={this.addAttachement}
                 />
-                <Button onClick={this.postComment} positive>
+                <Button
+                  disabled={isCommenting}
+                  loading={isCommenting}
+                  onClick={this.postComment}
+                  positive
+                >
                   <Icon name="paper plane" /> Send
                 </Button>
               </div>

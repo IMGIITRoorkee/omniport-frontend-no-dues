@@ -9,7 +9,9 @@ import {
   UPDATE_PERMISSION_STATUS,
   GET_PERMISSION_DETAIL,
   ADD_COMMENT_PERMISSION,
+  ADD_COMMENT_PERMISSION_REQUEST,
   GET_PERMISSION_FILTER_REQUEST,
+  UPDATE_PERMISSION_STATUS_REQUEST,
 } from "../constants/actions";
 import {
   permissionListApi,
@@ -23,14 +25,12 @@ import { AppropriateStatusName } from "../components/Verifier/permission";
 
 export const getPermissionList = () => {
   return (dispatch) => {
-    axios
-      .get(permissionListApi())
-      .then((res) => {
-        dispatch({
-          type: GET_PERMISSION_LIST,
-          payload: res.data,
-        });
-      })
+    axios.get(permissionListApi()).then((res) => {
+      dispatch({
+        type: GET_PERMISSION_LIST,
+        payload: res.data,
+      });
+    });
   };
 };
 
@@ -48,20 +48,18 @@ export const getPermissionFilter = (filter, enrolment_numbers = "") => {
           type: GET_PERMISSION_LIST,
           payload: res.data,
         });
-      })
+      });
   };
 };
 
 export const getPermissionDetail = (permissionId) => {
   return (dispatch) => {
-    axios
-      .get(permissionDetailApi(permissionId))
-      .then((res) => {
-        dispatch({
-          type: GET_PERMISSION_DETAIL,
-          payload: res.data,
-        });
-      })
+    axios.get(permissionDetailApi(permissionId)).then((res) => {
+      dispatch({
+        type: GET_PERMISSION_DETAIL,
+        payload: res.data,
+      });
+    });
   };
 };
 
@@ -70,6 +68,9 @@ export const massUpdateStatus = (enrolmentList, newStatus) => {
     "X-CSRFToken": getCookie("csrftoken"),
   };
   return (dispatch) => {
+    dispatch({
+      type: UPDATE_PERMISSION_STATUS_REQUEST,
+    });
     axios
       .post(
         MassApprovalApi(),
@@ -156,6 +157,17 @@ export const commentOnPermission = (
     if (attachment !== null) {
       formData.append("attachment", attachment);
     }
+
+    if (mark_reported) {
+      dispatch({
+        type: UPDATE_PERMISSION_STATUS_REQUEST,
+      });
+    } else {
+      dispatch({
+        type: ADD_COMMENT_PERMISSION_REQUEST,
+      });
+    }
+
     axios
       .post(permissionCommentApi(), formData, { headers: headers })
       .then((res) => {

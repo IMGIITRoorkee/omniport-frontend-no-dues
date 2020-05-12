@@ -170,12 +170,14 @@ class SubscriberHome extends Component {
                 <Table.Row>
                   <Table.Cell>{item.authority.fullName}</Table.Cell>
                   <Table.Cell textAlign="center">
-                    <StatusBtn
-                      permissionId={item.id}
-                      changeStatus={changeStatusDetails}
-                      status={item.status}
-                      description={item.authority.description}
-                    />
+                    <Segment basic>
+                      <StatusBtn
+                        permissionId={item.id}
+                        changeStatus={changeStatusDetails}
+                        status={item.status}
+                        description={item.authority.description}
+                      />
+                    </Segment>
                   </Table.Cell>
                   <Table.Cell textAlign="center">
                     {item.status !== "nrq" && (

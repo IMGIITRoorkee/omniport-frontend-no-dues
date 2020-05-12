@@ -2,15 +2,18 @@ import {
   GET_PERMISSION_DETAIL,
   ADD_COMMENT_PERMISSION,
   UPDATE_PERMISSION_STATUS,
+  ADD_COMMENT_PERMISSION_REQUEST,
 } from "../constants/actions";
 
 const getPermissionDetail = (
-  state = { isFetching: true, data: {} },
+  state = { isFetching: true, data: {}, isCommenting: false },
   action
 ) => {
   switch (action.type) {
+    case ADD_COMMENT_PERMISSION_REQUEST:
+      return { ...state, isCommenting: true };
     case GET_PERMISSION_DETAIL:
-      return { data: action.payload, isFetching: false };
+      return { ...state, data: action.payload, isFetching: false };
     case UPDATE_PERMISSION_STATUS:
       return {
         ...state,
@@ -21,11 +24,13 @@ const getPermissionDetail = (
       };
     case ADD_COMMENT_PERMISSION:
       return {
+        ...state,
         isFetching: false,
         data: {
           ...state.data,
           comments: [...state.data.comments, action.payload],
         },
+        isCommenting: false,
       };
     default:
       return state;

@@ -18,6 +18,7 @@ import {
   Form,
   TextArea,
   Dropdown,
+  Segment,
 } from "semantic-ui-react";
 
 import moment from "moment";
@@ -46,26 +47,26 @@ import main from "../../css/verifier.css";
 const StatusDetail = ({ status }) => {
   if (status === "app") {
     return (
-      <Header as="h5" color="green">
+      <Header textAlign="center" as="h5" color="green">
         <Icon fitted name="check" size="tiny" color="green" /> Approved
       </Header>
     );
   } else if (status === "nap") {
     return (
-      <Header as="h5" color="green">
+      <Header textAlign="center" as="h5" color="green">
         Not Applicable
       </Header>
     );
   } else if (status === "rep") {
     return (
-      <Header as="h5" color="yellow">
+      <Header textAlign="center" as="h5" color="yellow">
         <Icon fitted name="warning sign" size="tiny" color="yellow" /> Issue
         Raised
       </Header>
     );
   } else if (status === "req") {
     return (
-      <Header as="h5" color="blue">
+      <Header textAlign="center" as="h5" color="blue">
         <Icon fitted name="clock outline" size="tiny" color="blue" /> Requested
       </Header>
     );
@@ -91,6 +92,7 @@ class Home extends Component {
     reportPermissionText: "",
     reportPermissionAttachment: null,
     downloading: false,
+    raisingAnIssue: false,
   };
 
   fileInputRef = React.createRef();
@@ -212,13 +214,17 @@ class Home extends Component {
       reportPermissionId,
       reportPermissionAttachment,
     } = this.state;
-    this.props.commentOnPermission(
-      reportPermissionId,
-      reportPermissionText,
-      reportPermissionAttachment,
-      true
-    );
-    this.cancelReport();
+    this.setState({ raisingAnIssue: true }, () => {
+      this.props.commentOnPermission(
+        reportPermissionId,
+        reportPermissionText,
+        reportPermissionAttachment,
+        true
+      );
+      this.setState({ raisingAnIssue: false }, () => {
+        this.cancelReport();
+      });
+    });
   };
 
   onOpenMassApprovalModal = () => {
@@ -323,6 +329,7 @@ class Home extends Component {
       massApprovalStatus,
       massApprovalCheckBox,
       downloading,
+      raisingAnIssue,
     } = this.state;
 
     if (permissions.isFetching) {
@@ -395,7 +402,7 @@ class Home extends Component {
                   value={massApprovalStatus}
                   onChange={this.onMassApprovalStatus}
                   placeholder="New Status"
-                  options={statusOptions.filter(x => x.key!=='rep')}
+                  options={statusOptions.filter((x) => x.key !== "rep")}
                 />
               </Form.Field>
             </Form>
@@ -407,6 +414,8 @@ class Home extends Component {
               negative
             />
             <Button
+              disabled={raisingAnIssue}
+              loading={raisingAnIssue}
               onClick={this.onPostMassUpdate}
               content="Update Status"
               positive
@@ -442,6 +451,8 @@ class Home extends Component {
               onChange={this.addReportAttachment}
             />
             <Button
+              disabled={permissions.isChanging}
+              loading={permissions.isChanging}
               positive
               onClick={this.onSubmitReport}
               icon="paper plane"
@@ -578,7 +589,6 @@ class Home extends Component {
             </Table.Header>
             <Table.Body>
               {permissions.data.map((item, key) => {
-                console.log(item);
                 return (
                   <Table.Row>
                     <Table.Cell>

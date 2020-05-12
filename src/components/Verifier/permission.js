@@ -146,6 +146,7 @@ class Permission extends Component {
           </div>
           <Divider />
           <Conversation
+            isCommenting={permission.isCommenting}
             permissionId={permission.data.id}
             comments={permission.data.comments}
             authority={permission.data.authority}

@@ -18,15 +18,30 @@ import common from "../../css/common.css";
 class SubscriberDetail extends Component {
   state = {
     enrollmentNo: "",
+    isLoading: false,
   };
 
   componentDidMount() {
     const query = new URLSearchParams(this.props.location.search);
     const enrollmentNo = query.get("enrolment_number");
-    if (enrollmentNo !== null) {
+    if (enrollmentNo !== null && enrollmentNo !== "") {
       this.setState({ enrollmentNo }, () =>
         this.props.getSubscriberDetail(this.state.enrollmentNo)
       );
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.studentDetail.isFetching !== prevProps.studentDetail.isFetching
+    ) {
+      this.setState({ isLoading: this.props.studentDetail.isFetching });
+    }
+
+    if (
+      this.props.studentDetail.hasError !== prevProps.studentDetail.hasError && this.props.studentDetail.hasError
+    ) {
+      this.setState({ isLoading: false });
     }
   }
 
@@ -59,7 +74,12 @@ class SubscriberDetail extends Component {
               placeholder="Enter Enrollment No."
             >
               <input value={this.state.enrollmentNo} />{" "}
-              <Button onClick={this.onSubmitSearch} type="submit">
+              <Button
+                loading={this.state.isLoading}
+                disabled={this.state.isLoading}
+                onClick={this.onSubmitSearch}
+                type="submit"
+              >
                 Get Details
               </Button>
             </Input>

@@ -5,6 +5,7 @@ import { toast } from "react-semantic-toasts";
 import {
   GET_SUBSCRIBER_DETAIL,
   GET_SUBSCRIBER_DETAIL_REQUEST,
+  GET_SUBSCRIBER_DETAIL_ERROR
 } from "../constants/actions";
 
 import { subscriberDetailApi } from "../urls";
@@ -24,7 +25,7 @@ export const getSubscriberdetail = (enrollmentNo) => {
       })
       .catch((err) => {
         dispatch({
-          type: GET_SUBSCRIBER_DETAIL_REQUEST,
+          type: GET_SUBSCRIBER_DETAIL_ERROR,
         });
         toast({
           type: "error",

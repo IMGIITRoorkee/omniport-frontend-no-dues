@@ -138,7 +138,7 @@ class Conversation extends Component {
                   onChange={this.addAttachement}
                 />
                 <Button
-                  disabled={isCommenting}
+                  disabled={isCommenting || this.state.text.trim() === ""}
                   loading={isCommenting}
                   onClick={this.postComment}
                   positive

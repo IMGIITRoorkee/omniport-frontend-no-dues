@@ -414,7 +414,9 @@ class Home extends Component {
               negative
             />
             <Button
-              disabled={raisingAnIssue}
+              disabled={
+                raisingAnIssue || this.state.enrollmentNos.trim() === ""
+              }
               loading={raisingAnIssue}
               onClick={this.onPostMassUpdate}
               content="Update Status"
@@ -451,7 +453,10 @@ class Home extends Component {
               onChange={this.addReportAttachment}
             />
             <Button
-              disabled={permissions.isChanging}
+              disabled={
+                permissions.isChanging ||
+                this.state.reportPermissionText.trim() === ""
+              }
               loading={permissions.isChanging}
               positive
               onClick={this.onSubmitReport}

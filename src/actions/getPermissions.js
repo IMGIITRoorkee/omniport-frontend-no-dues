@@ -150,7 +150,9 @@ export const commentOnPermission = (
     let formData = new FormData();
     formData.append("permission_id", permissionId);
     formData.append("text", text);
-    formData.append("mark_reported", mark_reported);
+    if(mark_reported) {
+        formData.append("mark_reported", mark_reported);
+    }
     if (attachment !== null) {
       formData.append("attachment", attachment);
     }

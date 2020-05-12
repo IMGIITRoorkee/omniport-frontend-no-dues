@@ -132,7 +132,7 @@ class Conversation extends Component {
                   onChange={this.addAttachement}
                 />
                 <Button onClick={this.postComment} positive>
-                  <Icon name="paper plane" /> Submit
+                  <Icon name="paper plane" /> Send
                 </Button>
               </div>
             </Form>

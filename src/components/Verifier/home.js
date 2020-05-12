@@ -645,7 +645,7 @@ class Home extends Component {
                       </Link>
                       {item.latestCommentBy === "subscriber" && (
                         <Header as="h5" style={{ marginTop: 10 }} color="red">
-                          Unreaded comments
+                          Unread comments
                         </Header>
                       )}
                     </Table.Cell>

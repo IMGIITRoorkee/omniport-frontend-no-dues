@@ -185,7 +185,7 @@ class SubscriberHome extends Component {
                         </Link>
                         {item.latestCommentBy === "verifier" && (
                           <Header as="h5" style={{ marginTop: 10 }} color="red">
-                            Unreaded comments
+                            Unread comments
                           </Header>
                         )}
                       </>

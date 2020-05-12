@@ -19,6 +19,7 @@ import {
   TextArea,
   Dropdown,
   Segment,
+  Label,
 } from "semantic-ui-react";
 
 import moment from "moment";
@@ -409,22 +410,22 @@ class Home extends Component {
           </Modal.Content>
           <Modal.Actions>
             <Button
-              onClick={this.onCloseMassApprovalModal}
+              onClick={this.onCloseMassApprovalModal || permissions.isChanging}
               content="Cancel"
               negative
             />
             <Button
               disabled={
-                raisingAnIssue || this.state.enrollmentNos.trim() === ""
+                permissions.isChanging || this.state.enrollmentNos.trim() === ""
               }
-              loading={raisingAnIssue}
+              loading={permissions.isChanging}
               onClick={this.onPostMassUpdate}
               content="Update Status"
               positive
             />
           </Modal.Actions>
         </Modal>
-        <Modal open={this.state.reportPermissionModalOpen}>
+        <Modal open={this.state.reportPermissionModalOpen || raisingAnIssue}>
           <Modal.Header>Raise an Issue</Modal.Header>
           <Modal.Content>
             <Form>
@@ -433,16 +434,24 @@ class Home extends Component {
                 placeholder="Raise an issue by commenting here"
                 value={this.state.reportPermissionText}
               />
+              {this.state.reportPermissionAttachment !== null && (
+                <Label>
+                  {this.state.reportPermissionAttachment.name}
+                  <Icon
+                    name="delete"
+                    onClick={() =>
+                      this.setState({ reportPermissionAttachment: null })
+                    }
+                  />
+                </Label>
+              )}
             </Form>
           </Modal.Content>
           <Modal.Actions>
             <Button negative onClick={this.cancelReport} content="Cancel" />
-            {this.state.reportPermissionAttachment !== null && (
-              <Icon color="green" fitted size="large" name="check circle" />
-            )}
             <Button
               primary
-              content="Upload an attachment"
+              content="Attach a file"
               onClick={() => this.fileInputRef.current.click()}
               icon="upload"
             />
@@ -454,10 +463,9 @@ class Home extends Component {
             />
             <Button
               disabled={
-                permissions.isChanging ||
-                this.state.reportPermissionText.trim() === ""
+                raisingAnIssue || this.state.reportPermissionText.trim() === ""
               }
-              loading={permissions.isChanging}
+              loading={raisingAnIssue}
               positive
               onClick={this.onSubmitReport}
               icon="paper plane"

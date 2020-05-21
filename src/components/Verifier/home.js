@@ -477,10 +477,11 @@ class Home extends Component {
           <Button icon="eye" floated="right" content="View Student Status" />
         </Link>
         <Button
-          icon="check"
+          icon="certificate"
           active={presentFilter === "nodues"}
           floated="right"
-          content="No dues Students"
+          content="Greencard Holderd"
+          color="green"
           onClick={this.onClickNoDues}
         />
         {presentFilter === "nodues" ? (

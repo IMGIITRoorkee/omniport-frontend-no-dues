@@ -81,7 +81,9 @@ class Conversation extends Component {
               <Comment.Content>
                 <Comment.Author>{item.commenter.fullName}</Comment.Author>
                 <Comment.Metadata>
-                  {moment(item.datetimeCreated).fromNow()}
+                    {moment(item.datetimeCreated).format(
+                        '[at] HH:mm:ss [hrs] on Do MMMM, YYYY'
+                    )}
                 </Comment.Metadata>
                 <Comment.Text>
                   <p> {item.text} </p>

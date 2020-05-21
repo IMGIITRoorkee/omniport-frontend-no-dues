@@ -480,7 +480,7 @@ class Home extends Component {
           icon="certificate"
           active={presentFilter === "nodues"}
           floated="right"
-          content="Greencard Holderd"
+          content="Greencard Holders"
           color="green"
           onClick={this.onClickNoDues}
         />

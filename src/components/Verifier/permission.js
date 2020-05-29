@@ -27,6 +27,8 @@ export const AppropriateStatusName = (status) => {
   switch (status) {
     case "app":
       return "Approved";
+    case "apc":
+      return "Approved on Condition";
     case "nap":
       return "Not Applicable";
     case "rep":
@@ -40,6 +42,8 @@ const AppropriateStatusIcon = (status) => {
   switch (status) {
     case "app":
       return "check";
+    case "apc":
+      return "check circle outline";
     case "nap":
       return "check";
     case "rep":
@@ -52,6 +56,8 @@ const AppropriateStatusIcon = (status) => {
 const AppropriateStatusColor = (status) => {
   switch (status) {
     case "app":
+      return "green";
+    case "apc":
       return "green";
     case "nap":
       return "green";
@@ -70,6 +76,10 @@ class Permission extends Component {
 
   onApproveClick = (permissionId) => {
     this.props.changeStatusDetails("app", permissionId);
+  };
+
+  onApproveOnConditionClick = (permissionId) => {
+    this.props.changeStatusDetails("apc", permissionId);
   };
 
   onNotApplicableClick = (permissionId) => {
@@ -135,6 +145,16 @@ class Permission extends Component {
                     basic
                     content="Not Applicable"
                   />
+                  {permission.status !== 'apc' && (
+                    <Button
+                      onClick={() =>
+                        this.onApproveOnConditionClick(permission.data.id)
+                      }
+                      basic
+                      positive
+                      content="Approve on Condition"
+                    />
+                   )}
                   <Button
                     onClick={() => this.onApproveClick(permission.data.id)}
                     positive

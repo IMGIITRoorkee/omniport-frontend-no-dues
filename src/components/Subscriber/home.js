@@ -133,6 +133,12 @@ const StatusBtn = ({ status, changeStatus, permissionId, description }) => {
         <Icon fitted name="check" size="tiny" color="green" /> Not Applicable
       </Header>
     );
+  }else if (status === "apc") {
+    return (
+      <Header as="h5" color="green">
+        <Icon fitted name="check circle outline" size="tiny" color="green" /> Approved On Condition
+      </Header>
+    );
   }
 };
 

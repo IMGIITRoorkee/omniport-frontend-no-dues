@@ -24,6 +24,8 @@ export const AppropriateStatusName = (status) => {
   switch (status) {
     case "app":
       return "Approved by";
+    case "apc":
+      return "Approved on Condition by";
     case "nap":
       return "Not Applicable to";
     case "rep":
@@ -37,6 +39,8 @@ const AppropriateStatusIcon = (status) => {
   switch (status) {
     case "app":
       return "check";
+    case "apc":
+      return "check circle outline";
     case "nap":
       return "check";
     case "rep":
@@ -49,6 +53,8 @@ const AppropriateStatusIcon = (status) => {
 const AppropriateStatusColor = (status) => {
   switch (status) {
     case "app":
+      return "green";
+    case "apc":
       return "green";
     case "nap":
       return "green";

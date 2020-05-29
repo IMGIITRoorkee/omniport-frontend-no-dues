@@ -124,10 +124,10 @@ class SubscriberDetail extends Component {
                     return (
                       <Table.Row
                         positive={
-                          item.status === "app" || item.status === "nap"
+                          item.status === "app" || item.status === "nap" || item.status === "apc"
                         }
                         negative={
-                          item.status !== "app" && item.status !== "nap"
+                          item.status !== "app" && item.status !== "nap" && item.status !== "apc"
                         }
                       >
                         <Table.Cell>{item.authority.fullName}</Table.Cell>

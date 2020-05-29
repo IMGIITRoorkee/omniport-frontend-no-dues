@@ -52,7 +52,13 @@ const StatusDetail = ({ status }) => {
         <Icon fitted name="check" size="tiny" color="green" /> Approved
       </Header>
     );
-  } else if (status === "nap") {
+  } else if (status === "apc") {
+    return (
+      <Header textAlign="center" as="h5" color="green">
+        Approved on Condition
+      </Header>
+    );
+  }  else if (status === "nap") {
     return (
       <Header textAlign="center" as="h5" color="green">
         Not Applicable
@@ -76,6 +82,7 @@ const StatusDetail = ({ status }) => {
 
 const statusOptions = [
   { key: "app", value: "app", text: "Approved" },
+  { key: "apc", value: "apc", text: "Approved on Condition" },
   { key: "rep", value: "rep", text: "Raise an Issue" },
   { key: "nap", value: "nap", text: "Not Applicable" },
 ];
@@ -365,6 +372,12 @@ class Home extends Component {
             active={presentFilter === "nap"}
           >
             Not Applicable
+          </Button>
+          <Button
+            onClick={() => this.onFilterClick("apc")}
+            active={presentFilter === "apc"}
+          >
+            Approved On Condition
           </Button>
         </Button.Group>
         <Button

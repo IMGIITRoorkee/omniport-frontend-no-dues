@@ -83,7 +83,7 @@ class AskForApprovalBtn extends Component {
           open={this.state.modalOpen}
         >
           <Modal.Header>Ask For Approval</Modal.Header>
-          <Modal.Content>{this.props.description}</Modal.Content>
+          <Modal.Content style={{ whiteSpace: 'pre' }}>{this.props.description}</Modal.Content>
           <Modal.Actions>
             <Button onClick={this.closeModal} content="Cancel" negative />
             <Button

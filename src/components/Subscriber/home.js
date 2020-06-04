@@ -55,6 +55,11 @@ class AskForApprovalBtn extends Component {
     );
   };
 
+  httpHtml = (content) => {
+    const reg = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-)+)/g;
+    return content.replace(reg, "<a href='$1$2' target='_blank'>$1$2</a>");
+  };
+
   render() {
     if (this.props.description === "") {
       return (
@@ -83,7 +88,10 @@ class AskForApprovalBtn extends Component {
           open={this.state.modalOpen}
         >
           <Modal.Header>Ask For Approval</Modal.Header>
-          <Modal.Content style={{ whiteSpace: 'pre' }}>{this.props.description}</Modal.Content>
+          <Modal.Content 
+	      style={{ whiteSpace: 'pre' }} 
+	      dangerouslySetInnerHTML={{__html: this.httpHtml(this.props.description)}} 
+	  />
           <Modal.Actions>
             <Button onClick={this.closeModal} content="Cancel" negative />
             <Button

@@ -62,7 +62,7 @@ class ViewInstructions extends Component {
         >
           <Modal.Header>Instructions</Modal.Header>
           <Modal.Content 
-	      style={{ whiteSpace: 'pre' }} 
+	      style={{ whiteSpace: 'pre-line' }} 
 	      dangerouslySetInnerHTML={{__html: this.httpHtml(this.props.description)}} 
 	  />
           <Modal.Actions>
@@ -144,7 +144,7 @@ class AskForApprovalBtn extends Component {
         >
           <Modal.Header>Ask For Approval</Modal.Header>
           <Modal.Content 
-	      style={{ whiteSpace: 'pre' }} 
+	      style={{ whiteSpace: 'pre-line' }} 
 	      dangerouslySetInnerHTML={{__html: this.httpHtml(this.props.description)}} 
 	  />
           <Modal.Actions>

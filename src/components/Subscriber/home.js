@@ -24,6 +24,61 @@ import {
 
 import main from "../../css/subscriber.css";
 
+
+class ViewInstructions extends Component {
+  state = {
+    modalOpen: false,
+  };
+
+  openModal = () => {
+    this.setState({ modalOpen: true });
+  };
+
+  closeModal = () => {
+    this.setState({
+      modalOpen: false,
+    });
+  };
+  
+  httpHtml = (content) => {
+    const reg = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-)+)/g;
+    return content 
+		  ? content.replace(reg, "<a href='$1$2' target='_blank'>$1$2</a>") 
+		  : "Instructions are not updated by the authority yet. You may contact and ask them to update the instructions here.";
+  };
+
+  render() {
+      return (
+        <Modal
+          trigger={
+            <Button
+              onClick={this.openModal}
+	      basic
+	      icon="info"
+            >
+            </Button>
+          }
+          open={this.state.modalOpen}
+        >
+          <Modal.Header>Instructions</Modal.Header>
+          <Modal.Content 
+	      style={{ whiteSpace: 'pre' }} 
+	      dangerouslySetInnerHTML={{__html: this.httpHtml(this.props.description)}} 
+	  />
+          <Modal.Actions>
+            <Button
+              onClick={this.closeModal}
+              content="OK"
+	      icon
+              positive
+            />
+          </Modal.Actions>
+        </Modal>
+      );
+    }
+}
+
+
 class AskForApprovalBtn extends Component {
   state = {
     modalOpen: false,
@@ -170,6 +225,7 @@ class SubscriberHome extends Component {
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell width={10}>Authority</Table.HeaderCell>
+              <Table.HeaderCell width={4} textAlign="center">Instructions</Table.HeaderCell>
               <Table.HeaderCell textAlign="center" width={4}>
                 Status/Action
               </Table.HeaderCell>
@@ -183,6 +239,13 @@ class SubscriberHome extends Component {
               return (
                 <Table.Row>
                   <Table.Cell>{item.authority.fullName}</Table.Cell>
+                  <Table.Cell textAlign="center">
+		    <ViewInstructions
+		      permissionId={item.id}
+		      status={item.status}
+		      description={item.authority.description}
+		    />
+		  </Table.Cell>
                   <Table.Cell textAlign="center">
                     <Segment basic>
                       <StatusBtn

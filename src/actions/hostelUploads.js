@@ -9,25 +9,27 @@ import { getCookie } from "formula_one/src/utils";
 
 export const getHostelOptions = () => {
   return (dispatch) => {
-    axios
-      .options(bhawanOptionsApi())
-      .then((res) => {
-        dispatch({
-          type: OPTIONS_SELECT_HOSTEL,
-          payload: res.data,
-        });
-      })
+    axios.options(bhawanOptionsApi()).then((res) => {
+      dispatch({
+        type: OPTIONS_SELECT_HOSTEL,
+        payload: res.data,
+      });
+    });
   };
 };
 
-export const uploadHostelDetails = (hostels) => {
+export const uploadHostelDetails = (hostels, mess) => {
   let headers = {
     "Content-Type": "application/json",
     "X-CSRFToken": getCookie("csrftoken"),
   };
   return (dispatch) => {
     axios
-      .post(BhawanUploadApi(), { residences: hostels }, { headers: headers })
+      .post(
+        BhawanUploadApi(),
+        { residences: hostels, mess: mess },
+        { headers: headers }
+      )
       .then((res) => {
         dispatch({
           type: UPLOAD_ID_CARD,

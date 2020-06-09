@@ -30,14 +30,36 @@ const HostelToOptions = (hostels) => {
   return hostelLists;
 };
 
+const MessOptions = (messes) => {
+  var messLists = [];
+  messLists.push({
+    key: "no",
+    value: "no",
+    text: "No Mess",
+  });
+  for (var mess of messes) {
+    messLists.push({
+      key: mess.slug,
+      value: mess.slug,
+      text: mess.name,
+    });
+  }
+  return messLists;
+};
+
 class HostelUploads extends Component {
   state = {
     hostelSelected: [],
+    messSelected: "",
     isModalOpen: false,
   };
 
   onChangeHostelValue = (e, { value }) => {
     this.setState({ hostelSelected: value });
+  };
+
+  onChangeMessValue = (e, { value }) => {
+    this.setState({ messSelected: value });
   };
 
   openModal = () => {
@@ -57,7 +79,11 @@ class HostelUploads extends Component {
         time: 1000,
       });
     } else {
-      this.props.uploadHostelDetails(this.state.hostelSelected);
+      let messSelected = this.state.messSelected;
+      if (messSelected === "no") {
+        messSelected = "";
+      }
+      this.props.uploadHostelDetails(this.state.hostelSelected, messSelected);
     }
     this.closeModal();
   };
@@ -93,6 +119,19 @@ class HostelUploads extends Component {
             value={this.state.hostelSelected}
             onChange={this.onChangeHostelValue}
             options={HostelToOptions(hostels.residenceOptions)}
+          />
+          <h3>Select the latest Hostel Mess you were dinning in</h3>
+          <div className={main["notif"]}>
+            Note: Please select the options carefully, this field is non
+            editable once submitted.
+          </div>
+          <Dropdown
+            fluid
+            selection
+            value={this.state.messSelected}
+            onChange={this.onChangeMessValue}
+            search
+            options={MessOptions(hostels.messOptions)}
           />
           <Modal
             open={this.state.isModalOpen}
@@ -149,8 +188,8 @@ const mapDispatchToProps = (dispatch) => {
     getHostelOptions: () => {
       dispatch(getHostelOptions());
     },
-    uploadHostelDetails: (hostels) => {
-      dispatch(uploadHostelDetails(hostels));
+    uploadHostelDetails: (hostels, mess) => {
+      dispatch(uploadHostelDetails(hostels, mess));
     },
   };
 };

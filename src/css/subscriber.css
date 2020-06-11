@@ -50,6 +50,12 @@
 .permission-table {
   max-width: 900px;
   margin: 4rem;
+  margin-top: 2rem;
+}
+
+.help-text {
+  display: flex;
+  justify-content: space-between;
 }
 
 .permission-chats {

@@ -7,7 +7,7 @@ import Permission from "./permission";
 import SubscriberDetail from "./subscriberDetail";
 
 import common from "../../css/common.css";
-import { Divider } from "semantic-ui-react";
+import { Divider, Button, Icon } from "semantic-ui-react";
 
 function MainComponent({ match }) {
   return (
@@ -34,6 +34,13 @@ class Verifer extends Component {
             <br />
             Authority: {profile.authority.fullName}
           </div>
+          <Button
+            as='a'
+            href='https://www.iitr.ac.in/Main/uploads/File/website%20support/OnlineNoDueProcessExplained.pdf'
+            target='_blank'>
+            <Icon name='question' />
+            Verifier Manual
+          </Button>
         </div>
         <Divider styleName="common.common-divider" />
         <MainComponent profile={profile} match={match} />

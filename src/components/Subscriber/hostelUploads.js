@@ -148,8 +148,8 @@ class HostelUploads extends Component {
           >
             <Modal.Content>
               <h3>
-                Make sure you have selected all the bhawans from the first to
-                the last semester.
+                Please make sure that you enter correct Bhawans and Mess details.
+                Any discrepancy will delay the process.
               </h3>
               <Grid centered celled="internally" columns={2}>
                 <Grid.Column

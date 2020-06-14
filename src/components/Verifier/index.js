@@ -41,8 +41,6 @@ class ViewInstructions extends Component {
   httpHtml = content => {
     const reg = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-)+)/g
     return content
-      ? content.replace(reg, "<a href='$1$2' target='_blank'>$1$2</a>")
-      : 'Instructions are not updated.'
   }
 
   render() {
@@ -53,7 +51,6 @@ class ViewInstructions extends Component {
       >
         <Modal.Header>Instructions</Modal.Header>
         <Modal.Content
-          style={{ whiteSpace: 'pre-line' }}
           dangerouslySetInnerHTML={{
             __html: this.httpHtml(this.props.description)
           }}

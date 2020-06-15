@@ -32,11 +32,6 @@ const HostelToOptions = (hostels) => {
 
 const MessOptions = (messes) => {
   var messLists = [];
-  messLists.push({
-    key: "no",
-    value: "no",
-    text: "No Mess",
-  });
   for (var mess of messes) {
     messLists.push({
       key: mess.slug,

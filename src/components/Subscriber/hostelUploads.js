@@ -115,7 +115,7 @@ class HostelUploads extends Component {
             onChange={this.onChangeHostelValue}
             options={HostelToOptions(hostels.residenceOptions)}
           />
-          <h3>Select the latest Hostel Mess you were dinning in</h3>
+          <h3>Select the latest Hostel Mess you were dinning in before the COVID-19. Do not include the temporary mess you were dining in due to this pandemic.</h3>
           <div className={main["notif"]}>
             Note: Please select the options carefully, this field is non
             editable once submitted.

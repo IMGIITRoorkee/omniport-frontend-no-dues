@@ -95,8 +95,7 @@ class AskForApprovalBtn extends Component {
   }
 
   httpHtml = content => {
-    const reg = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-)+)/g
-    return content.replace(reg, "<a href='$1$2' target='_blank'>$1$2</a>")
+    return content
   }
 
   render() {
@@ -128,7 +127,6 @@ class AskForApprovalBtn extends Component {
         >
           <Modal.Header>Ask For Approval</Modal.Header>
           <Modal.Content
-            style={{ whiteSpace: 'pre-line' }}
             dangerouslySetInnerHTML={{
               __html: this.httpHtml(this.props.description)
             }}

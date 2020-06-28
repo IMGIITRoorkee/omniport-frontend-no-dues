@@ -50,6 +50,14 @@ class Subscriber extends Component {
             Enrollment No: {profile.personEnrolment}
             <br />
             Branch: {profile.personDepartment}
+	    {
+               profile.noDue &&
+	    (<b>
+	      <br />
+    	      <Icon name='check circle outline' color='green'/>
+	      You have obtained no dues slip from all of the required departments. Further process will be handled by the Academic section.
+	    </b>)
+	    }
           </div>
           <div styleName="common.upload">
             {profile.idCard !== null && (

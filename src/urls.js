@@ -64,8 +64,8 @@ export function subscriberDetailApi(enrollmentNo) {
   return `${subscriberListApi()}${enrollmentNo}`;
 }
 
-export function downloadSubscriberData() {
-  return `${subscriberListApi()}?download=xlsx`;
+export function downloadSubscriberData(year) {
+  return `${subscriberListApi()}?download=xlsx&&year=${year}`;
 }
 
 // Post APIs

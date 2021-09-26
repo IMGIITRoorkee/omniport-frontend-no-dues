@@ -101,6 +101,8 @@ class Home extends Component {
     reportPermissionAttachment: null,
     downloading: false,
     raisingAnIssue: false,
+    downloadDataModalOpen: false,
+    downloadYear: "",
   };
 
   fileInputRef = React.createRef();
@@ -134,6 +136,28 @@ class Home extends Component {
     }
   }
 
+  getDownloadYearOptions = () => {
+    let year = new Date().getFullYear()
+    if (new Date().getMonth() > 3) year += 1
+    let options = []
+    for (let i = year; i > 2019; i--) {
+      options.push({
+        key: i,
+        value: i,
+        text: i
+      })
+    }
+    return options
+  }
+
+  openDownloadDataModal = () => {
+    this.setState({ downloadDataModalOpen: true })
+  }
+
+  closeDownloadDataModal = () => {
+    this.setState({ downloadDataModalOpen: false })
+  }
+
   resetValue = (required) => {
     let { enrollmentMass } = this.state;
     for (let key in enrollmentMass) {
@@ -153,6 +177,10 @@ class Home extends Component {
 
   onMassApprovalStatus = (e, { value }) => {
     this.setState({ massApprovalStatus: value });
+  };
+
+  onDownloadYearChange = (e, { value }) => {
+    this.setState({ downloadYear: value });
   };
 
   onPostMassUpdate = () => {
@@ -292,13 +320,14 @@ class Home extends Component {
   };
 
   downloadStudentData = () => {
+    if (this.state.downloadYear === "") return;
     this.setState(
       {
         downloading: true,
       },
       () => {
         axios
-          .get(downloadSubscriberData())
+          .get(downloadSubscriberData(this.state.downloadYear))
           .then((response) => {
             const filename = response.headers["content-disposition"].split(
               "filename="
@@ -311,6 +340,8 @@ class Home extends Component {
             link.click();
             this.setState({
               downloading: false,
+              downloadYear: "",
+              openDownloadDataModal: false,
             });
           })
           .catch(() => {
@@ -380,15 +411,49 @@ class Home extends Component {
             Approved On Condition
           </Button>
         </Button.Group>
-        <Button
-          onClick={this.downloadStudentData}
-          icon="file excel"
-          floated="right"
-          content="Download Student Data"
-          color="green"
-          disabled={downloading}
-          loading={downloading}
-        />
+        <Modal
+          onClose={this.closeDownloadDataModal}
+          open={this.state.downloadDataModalOpen}
+          trigger={
+            <Button
+              onClick={this.openDownloadDataModal}
+              icon="file excel"
+              floated="right"
+              color="green"
+              content="Download Student Data"
+            />
+          }
+        >
+          <Modal.Header>Download Student Data</Modal.Header>
+          <Modal.Content>
+            <Form>
+              <Form.Field inline>
+                <label>Select year to download data</label>
+                <Form.Select
+                  value={this.state.downloadYear}
+                  onChange={this.onDownloadYearChange}
+                  placeholder="Year"
+                  options={this.getDownloadYearOptions()}
+                />
+              </Form.Field>
+            </Form>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button
+              onClick={this.closeDownloadDataModal}
+              content="Cancel"
+              negative
+            />
+            <Button
+              disabled={this.state.downloadYear===""}
+              loading={this.state.downloading}
+              onClick={this.downloadStudentData}
+              icon="file excel"
+              content="Download"
+              positive
+            />
+          </Modal.Actions>
+        </Modal>
         <Modal
           onClose={this.onCloseMassApprovalModal}
           open={this.state.massApprovalModalOpen}

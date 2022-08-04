@@ -20,6 +20,7 @@ class IdentityCardUpload extends Component {
           <h3>You need to upload your institute ID card to proceed</h3>
           <Button
             size="large"
+            title="Upload Image"
             primary
             onClick={() => this.fileInputRef.current.click()}
           >
@@ -28,6 +29,7 @@ class IdentityCardUpload extends Component {
           <input
             ref={this.fileInputRef}
             type="file"
+            accept="image/*"
             hidden
             onChange={this.addIDCard}
           />

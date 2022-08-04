@@ -74,12 +74,13 @@ class Subscriber extends Component {
                 <Icon name="id card" />
               </div>
             )}{" "}
-            <Button primary onClick={() => this.fileInputRef.current.click()}>
+            <Button title="Upload Image" primary onClick={() => this.fileInputRef.current.click()}>
               <Icon name="upload" size="large" /> Upload ID Card{" "}
             </Button>
             <input
               ref={this.fileInputRef}
               type="file"
+              accept="image/*"
               hidden
               onChange={this.addIDCard}
             />

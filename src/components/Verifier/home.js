@@ -41,6 +41,7 @@ import {
   urlPermissionView,
   urlSearchedSubscriber,
   downloadSubscriberData,
+  downloadGreencardHolderData,
 } from "../../urls";
 
 import main from "../../css/verifier.css";
@@ -360,6 +361,44 @@ class Home extends Component {
     );
   };
 
+  downloadGreencardData = () => {
+    this.setState(
+      {
+        downloading: true,
+      },
+      () => {
+        axios
+          .get(downloadGreencardHolderData())
+          .then((response) => {
+            const filename = response.headers["content-disposition"].split(
+              "filename="
+            )[1];
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", filename);
+            document.body.appendChild(link);
+            link.click();
+            this.setState({
+              downloading: false,
+            });
+          })
+          .catch(() => {
+            toast({
+              type: "error",
+              title: "Some error occurred, while downloading",
+              animation: "fade up",
+              icon: "frown outline",
+              time: 4000,
+            });
+            this.setState({
+              downloading: false,
+            });
+          });
+      }
+    );
+  };
+
   render() {
     const { permissions, noDuesStudents } = this.props;
     const {
@@ -561,6 +600,13 @@ class Home extends Component {
           content="Greencard Holders"
           color="green"
           onClick={this.onClickNoDues}
+        />
+        <Button
+          icon="file excel"
+          floated="right"
+          color="green"
+          content="Download Greencard Holders"
+          onClick={this.downloadGreencardData}
         />
         {presentFilter === "nodues" ? (
           <>

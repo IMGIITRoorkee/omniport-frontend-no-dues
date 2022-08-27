@@ -68,6 +68,10 @@ export function downloadSubscriberData(year) {
   return `${subscriberListApi()}?download=xlsx&&year=${year}`;
 }
 
+export function downloadGreencardHolderData() {
+  return `${subscriberListApi()}?download=xlsx&&nodue=true`;
+}
+
 // Post APIs
 export function IdentityUploadApi() {
   return `${profileApi()}`;

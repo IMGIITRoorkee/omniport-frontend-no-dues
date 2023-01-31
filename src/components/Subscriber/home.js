@@ -209,9 +209,9 @@ class SubscriberHome extends Component {
         <div className={main['help-text']}>
           <div>
             <b>
-              You have to get no dues Approved, Not Applicable or Approved on Condition for all of the listed authorities.
+              <mark>You have to get no dues Approved, Not Applicable or Approved on Condition for all of the listed authorities.</mark>
             <br />
-            Read each of the instructions carefully before you apply for approval from any of the authorities.
+              <mark>Read each of the instructions carefully before you apply for approval from any of the authorities.</mark>
           </b>
           </div>
           <Button

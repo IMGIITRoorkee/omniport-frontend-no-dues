@@ -56,20 +56,20 @@ export function permissionCommentApi() {
   return `${urlBaseApi()}/comment/`;
 }
 
-export function subscriberListApi() {
-  return `${urlBaseApi()}/subscriber/`;
+export function subscriberListApi(page) {
+  return `${urlBaseApi()}/subscriber/?page=${page}`;
 }
 
 export function subscriberDetailApi(enrollmentNo) {
-  return `${subscriberListApi()}${enrollmentNo}`;
+  return `${urlBaseApi()}/subscriber/${enrollmentNo}`;
 }
 
 export function downloadSubscriberData(year) {
-  return `${subscriberListApi()}?download=xlsx&&year=${year}`;
+  return `${urlBaseApi()}/subscriber/?download=xlsx&&year=${year}`;
 }
 
 export function downloadGreencardHolderData() {
-  return `${subscriberListApi()}?download=xlsx&&nodue=true`;
+  return `${urlBaseApi()}/subscriber/?download=xlsx&&nodue=true`;
 }
 
 // Post APIs

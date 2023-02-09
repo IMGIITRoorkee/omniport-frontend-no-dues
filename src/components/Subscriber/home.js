@@ -238,7 +238,7 @@ class SubscriberHome extends Component {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {permissions.data.map((item, key) => {
+            {permissions.data.results.map((item, key) => {
               return (
                 <Table.Row>
                   <Table.Cell>{item.authority.fullName}</Table.Cell>

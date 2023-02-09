@@ -106,7 +106,7 @@ class Home extends Component {
     downloadDataModalOpen: false,
     downloadYear: "",
     activePage: 1,
-    pageSize: 10,
+    pageSize: 50,
   };
 
   fileInputRef = React.createRef();
@@ -122,7 +122,7 @@ class Home extends Component {
     this.setState({ presentFilter: filter });
   };
 
-  onPageChange = (e, {activePage}) => {
+  onPermissionPageChange = (e, {activePage}) => {
     this.setState({activePage: activePage})
     const { presentFilter } = this.state
     if(presentFilter === "pen") {
@@ -130,6 +130,11 @@ class Home extends Component {
     } else {
       this.props.getPermissionFilter(`${presentFilter}&page=${activePage}`);
     }
+  }
+
+  onSubscriberPageChange = (e, {activePage}) => {
+    this.setState({activePage: activePage})
+    this.props.getNoDuesSubscriberList(activePage);
   }
 
   componentDidMount() {
@@ -328,10 +333,11 @@ class Home extends Component {
   };
 
   onClickNoDues = () => {
+    this.setState({activePage: 1});
     this.setState({
       presentFilter: "nodues",
     });
-    this.props.getNoDuesSubscriberList();
+    this.props.getNoDuesSubscriberList(1);
   };
 
   downloadStudentData = () => {
@@ -642,7 +648,7 @@ class Home extends Component {
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {noDuesStudents.data.map((item, key) => {
+                {!noDuesStudents.isFetching && noDuesStudents.data.results.map((item, key) => {
                   return (
                     <Table.Row>
                       <Table.Cell>{item.personName}</Table.Cell>
@@ -671,6 +677,16 @@ class Home extends Component {
                 })}
               </Table.Body>
             </Table>
+            <div style={{textAlign: "center"}}>
+              <Pagination
+                activePage={activePage}
+                onPageChange={this.onSubscriberPageChange}
+                boundaryRange={0}
+                firstItem={null}
+                lastItem={null}
+                totalPages={noDuesStudents.data ? Math.ceil(noDuesStudents.data.count/pageSize) : 0}
+              />
+            </div>
           </>
         ) : (
           <>
@@ -822,7 +838,7 @@ class Home extends Component {
           <div style={{textAlign: "center"}}>
             <Pagination
               activePage={activePage}
-              onPageChange={this.onPageChange}
+              onPageChange={this.onPermissionPageChange}
               boundaryRange={0}
               firstItem={null}
               lastItem={null}
@@ -857,8 +873,8 @@ const mapDispatchToProps = (dispatch) => {
     massUpdateStatus: (enrollmentList, newStatus) => {
       dispatch(massUpdateStatus(enrollmentList, newStatus));
     },
-    getNoDuesSubscriberList: () => {
-      dispatch(getNoDuesSubscriberList());
+    getNoDuesSubscriberList: (page) => {
+      dispatch(getNoDuesSubscriberList(page));
     },
     commentOnPermission: (permissionId, content, attachment, markReported) => {
       dispatch(

@@ -20,6 +20,7 @@ import {
   Dropdown,
   Segment,
   Label,
+  Pagination
 } from "semantic-ui-react";
 
 import moment from "moment";
@@ -104,32 +105,45 @@ class Home extends Component {
     raisingAnIssue: false,
     downloadDataModalOpen: false,
     downloadYear: "",
+    activePage: 1,
+    pageSize: 10,
   };
 
   fileInputRef = React.createRef();
 
   onFilterClick = (filter) => {
+    this.setState({activePage: 1});
     this.setState({ massApprovalCheckBox: false });
     if (filter === "pen") {
-      this.props.getPermissionFilter("req&status=rep");
+      this.props.getPermissionFilter(`req&status=rep&page=${1}`);
     } else {
-      this.props.getPermissionFilter(filter);
+      this.props.getPermissionFilter(`${filter}&page=${1}`);
     }
     this.setState({ presentFilter: filter });
   };
 
+  onPageChange = (e, {activePage}) => {
+    this.setState({activePage: activePage})
+    const { presentFilter } = this.state
+    if(presentFilter === "pen") {
+      this.props.getPermissionFilter(`req&status=rep&page=${activePage}`);
+    } else {
+      this.props.getPermissionFilter(`${presentFilter}&page=${activePage}`);
+    }
+  }
+
   componentDidMount() {
-    this.props.getPermissionFilter("req&status=rep");
+    const { activePage } = this.state;
+    this.props.getPermissionFilter(`req&status=rep&page=${activePage}`);
   }
 
   componentDidUpdate(prevProps) {
     if (!this.props.permissions.isFetching) {
       if (prevProps.permissions.data !== this.props.permissions.data) {
         let enrollmentMassValue = {};
-        for (let item of this.props.permissions.data) {
+        for (let item of this.props.permissions.data.results) {
           enrollmentMassValue[item.subscriber.personEnrolment] = false;
         }
-
         this.setState({
           enrollmentMass: enrollmentMassValue,
         });
@@ -408,6 +422,8 @@ class Home extends Component {
       massApprovalCheckBox,
       downloading,
       raisingAnIssue,
+      activePage,
+      pageSize
     } = this.state;
 
     if (permissions.isFetching) {
@@ -657,6 +673,7 @@ class Home extends Component {
             </Table>
           </>
         ) : (
+          <>
           <Table celled>
             <Table.Header>
               <Table.Row>
@@ -726,7 +743,7 @@ class Home extends Component {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {permissions.data.map((item, key) => {
+              {permissions.data.results.map((item, key) => {
                 return (
                   <Table.Row>
                     <Table.Cell>
@@ -802,6 +819,17 @@ class Home extends Component {
               })}
             </Table.Body>
           </Table>
+          <div style={{textAlign: "center"}}>
+            <Pagination
+              activePage={activePage}
+              onPageChange={this.onPageChange}
+              boundaryRange={0}
+              firstItem={null}
+              lastItem={null}
+              totalPages={permissions.data ? Math.ceil(permissions.data.count/pageSize) : 0}
+            />
+          </div>
+          </>
         )}
       </div>
     );

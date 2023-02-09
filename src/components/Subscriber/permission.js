@@ -73,7 +73,6 @@ class SubscriberPermission extends Component {
 
   render() {
     const { permission } = this.props;
-
     if (permission.isFetching) {
       return (
         <Dimmer active inverted>

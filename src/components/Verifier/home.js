@@ -20,8 +20,12 @@ import {
   Dropdown,
   Segment,
   Label,
-  Pagination
+  Pagination,
+  Menu,
 } from "semantic-ui-react";
+
+import { DatesRangeInput } from 'semantic-ui-calendar-react'
+import { dateFormatMatch } from '../../utils/dateFormatMatch'
 
 import moment from "moment";
 
@@ -46,6 +50,7 @@ import {
 } from "../../urls";
 
 import main from "../../css/verifier.css";
+import dropdown from '../../css/dropdown.css'
 
 const StatusDetail = ({ status }) => {
   if (status === "app") {
@@ -107,34 +112,131 @@ class Home extends Component {
     downloadYear: "",
     activePage: 1,
     pageSize: 50,
+    dateRangeActive: false,
+    datesRange: '',
   };
 
   fileInputRef = React.createRef();
 
   onFilterClick = (filter) => {
+    const { dateRangeActive, datesRange } = this.state;
+    let dateRange = dateFormatMatch(datesRange);
     this.setState({activePage: 1});
     this.setState({ massApprovalCheckBox: false });
+    let url;
     if (filter === "pen") {
-      this.props.getPermissionFilter(`req&status=rep&page=${1}`);
+      url = `req&status=rep&page=${1}`;
     } else {
-      this.props.getPermissionFilter(`${filter}&page=${1}`);
+      url = `${filter}&page=${1}`;
     }
+    if(dateRangeActive) {
+      url += `&start=${dateRange.start}&end=${dateRange.end}`;
+    } 
     this.setState({ presentFilter: filter });
+    this.props.getPermissionFilter(url);
   };
 
   onPermissionPageChange = (e, {activePage}) => {
+    const { dateRangeActive, datesRange } = this.state;
+    let dateRange = dateFormatMatch(datesRange);
     this.setState({activePage: activePage})
     const { presentFilter } = this.state
-    if(presentFilter === "pen") {
-      this.props.getPermissionFilter(`req&status=rep&page=${activePage}`);
+    let url;
+    if (presentFilter === "pen") {
+      url = `req&status=rep&page=${activePage}`;
     } else {
-      this.props.getPermissionFilter(`${presentFilter}&page=${activePage}`);
+      url = `${presentFilter}&page=${activePage}`;
     }
+    if(dateRangeActive) {
+      url += `&start=${dateRange.start}&end=${dateRange.end}`;
+    } 
+    this.props.getPermissionFilter(url);
   }
 
   onSubscriberPageChange = (e, {activePage}) => {
+    const { dateRangeActive, datesRange } = this.state;
+    let dateRange = dateFormatMatch(datesRange);
     this.setState({activePage: activePage})
-    this.props.getNoDuesSubscriberList(activePage);
+    if(dateRangeActive) {
+      this.props.getNoDuesSubscriberList(activePage, dateRange.start, dateRange.end);
+    } else {
+      this.props.getNoDuesSubscriberList(activePage);
+    }
+  }
+
+  handleDateFilterSubmit = (value) => {
+    const { presentFilter, activePage } = this.state;
+    let dateRange, dateRangeActive;
+    dateRange = dateFormatMatch(value);
+    if (dateRange) {
+        dateRangeActive = true;
+    } else {
+        dateRangeActive = false;
+    }
+    this.setState({
+      activePage: 1,
+    })
+    if(presentFilter === "nodues") {
+      if(dateRangeActive) {
+        this.props.getNoDuesSubscriberList(activePage, dateRange.start, dateRange.end);
+      } else {
+        this.props.getNoDuesSubscriberList(activePage);
+      }
+      return;
+    }
+    let url;
+    if (presentFilter === "pen") {
+      url = `req&status=rep&page=${activePage}`;
+    }  else {
+      url = `${presentFilter}&page=${activePage}`;
+    }
+    if(dateRangeActive) {
+      url += `&start=${dateRange.start}&end=${dateRange.end}`;
+    } 
+    this.props.getPermissionFilter(url);
+  }
+
+  handleDateFilterChange = (event, { name, value }) => {
+    if (this.state.hasOwnProperty(name)) {
+      let datesRange, dateRangeActive;
+      datesRange = dateFormatMatch(value);
+      let flag = false;
+      if (datesRange || value === '') {
+          flag = true;
+      }
+      if (value === '') {
+          dateRangeActive = false;
+      } else {
+          dateRangeActive = true;
+      }
+      this.setState({
+          [name]: value,
+          dateRangeActive: dateRangeActive
+      })
+      if (flag) {
+          this.handleDateFilterSubmit(value);
+      }
+    }
+  }
+
+  handleDateDelete = () => {
+    const { presentFilter, activePage } = this.state
+    this.setState({ 
+      dateRangeActive: false, 
+      datesRange: '',
+      activePage: 1,
+    })
+    if(presentFilter === "nodues") {
+      this.props.getNoDuesSubscriberList(1);
+      return;
+    }
+    let url;
+    if (presentFilter === "pen") {
+      url = `req&status=rep&page=${1}`
+    } else {
+      url = `${presentFilter}&page=${1}`;
+    }
+    this.props.getPermissionFilter(url);
   }
 
   componentDidMount() {
@@ -332,9 +434,9 @@ class Home extends Component {
     this.setState({ massApprovalCheckBox: false });
   };
 
-  onClickNoDues = () => {
-    this.setState({activePage: 1});
+  onClickNoDues = (e) => {
     this.setState({
+      activePage: 1,
       presentFilter: "nodues",
     });
     this.props.getNoDuesSubscriberList(1);
@@ -429,7 +531,9 @@ class Home extends Component {
       downloading,
       raisingAnIssue,
       activePage,
-      pageSize
+      pageSize,
+      dateRangeActive,
+      datesRange,
     } = this.state;
 
     if (permissions.isFetching) {
@@ -442,6 +546,7 @@ class Home extends Component {
 
     return (
       <div className={main["main-content"]}>
+
         <Button.Group className={main["white-bg"]} basic>
           <Button
             onClick={() => this.onFilterClick("pen")}
@@ -472,6 +577,50 @@ class Home extends Component {
             Approved On Condition
           </Button>
         </Button.Group>
+        <Menu.Menu position='left' styleName='dropdown.flex-wrap'>
+          <Menu.Item styleName='dropdown.date-bar'>
+              {!dateRangeActive ? (
+                  <Form
+                      onSubmit={this.handleDateFilterSubmit} 
+                      autoComplete='off'
+                  >
+                      <DatesRangeInput
+                          styleName='dropdown.input-bar'
+                          name='datesRange'
+                          placeholder='Date: From - To'
+                          closable={true}
+                          closeOnMouseLeave={true}
+                          value={datesRange}
+                          dateFormat='YYYY-MM-DD'
+                          onChange={this.handleDateFilterChange}
+                      />
+                  </Form>
+              ) : (
+                  <Form 
+                      onSubmit={this.handleDateFilterSubmit} 
+                      autoComplete='off'
+                  >
+                      <DatesRangeInput
+                          styleName='dropdown.input-bar'
+                          name='datesRange'
+                          placeholder='Date: From - To'
+                          closable={true}
+                          icon={
+                          <Icon
+                              name='delete'
+                              link
+                              onClick={this.handleDateDelete}
+                          />
+                          }
+                          closeOnMouseLeave={true}
+                          value={datesRange}
+                          dateFormat='YYYY-MM-DD'
+                          onChange={this.handleDateFilterChange}
+                      />
+                  </Form>
+              )}
+          </Menu.Item>
+        </Menu.Menu>
         <Modal
           onClose={this.closeDownloadDataModal}
           open={this.state.downloadDataModalOpen}
@@ -630,6 +779,7 @@ class Home extends Component {
           content="Download Greencard Holders"
           onClick={this.downloadGreencardData}
         />
+
         {presentFilter === "nodues" ? (
           <>
             {noDuesStudents.isFetching && (
@@ -873,8 +1023,8 @@ const mapDispatchToProps = (dispatch) => {
     massUpdateStatus: (enrollmentList, newStatus) => {
       dispatch(massUpdateStatus(enrollmentList, newStatus));
     },
-    getNoDuesSubscriberList: (page) => {
-      dispatch(getNoDuesSubscriberList(page));
+    getNoDuesSubscriberList: (page, start, end) => {
+      dispatch(getNoDuesSubscriberList(page, start, end));
     },
     commentOnPermission: (permissionId, content, attachment, markReported) => {
       dispatch(

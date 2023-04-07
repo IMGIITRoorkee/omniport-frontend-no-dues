@@ -426,6 +426,10 @@ class Home extends Component {
     }
   };
 
+  onChangeGreenCardEnrollmentNo = (name, value) => {
+    this.props.getNoDuesSubscriberList(1,'undefined','undefined',value);
+  };
+
   onCloseMassApprovalModal = () => {
     this.setState({
       massApprovalModalOpen: false,
@@ -796,6 +800,24 @@ class Home extends Component {
                   <Table.HeaderCell>Department</Table.HeaderCell>
                   <Table.HeaderCell>ID Card</Table.HeaderCell>
                 </Table.Row>
+                <Table.Row>
+                <Table.HeaderCell></Table.HeaderCell>
+                <Table.HeaderCell>
+                  <Input
+                    onChange={debounce(
+                      (e, { name, value }) =>
+                        this.onChangeGreenCardEnrollmentNo(name, value),
+                      500
+                    )}
+                    icon="search"
+                    placeholder="Search with enrolment number"
+                    fluid
+                  />
+                </Table.HeaderCell>
+                <Table.HeaderCell></Table.HeaderCell>
+                <Table.HeaderCell></Table.HeaderCell>
+                <Table.HeaderCell></Table.HeaderCell>
+              </Table.Row>
               </Table.Header>
               <Table.Body>
                 {!noDuesStudents.isFetching && noDuesStudents.data.results.map((item, key) => {
@@ -1023,8 +1045,8 @@ const mapDispatchToProps = (dispatch) => {
     massUpdateStatus: (enrollmentList, newStatus) => {
       dispatch(massUpdateStatus(enrollmentList, newStatus));
     },
-    getNoDuesSubscriberList: (page, start, end) => {
-      dispatch(getNoDuesSubscriberList(page, start, end));
+    getNoDuesSubscriberList: (page, start, end, enrolment_no = "") => {
+      dispatch(getNoDuesSubscriberList(page, start, end, enrolment_no));
     },
     commentOnPermission: (permissionId, content, attachment, markReported) => {
       dispatch(

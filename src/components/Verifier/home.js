@@ -796,6 +796,7 @@ class Home extends Component {
                 <Table.Row>
                   <Table.HeaderCell>Name</Table.HeaderCell>
                   <Table.HeaderCell>Enrolment No. </Table.HeaderCell>
+                  <Table.HeaderCell>Email Address</Table.HeaderCell>
                   <Table.HeaderCell>Branch</Table.HeaderCell>
                   <Table.HeaderCell>Department</Table.HeaderCell>
                   <Table.HeaderCell>ID Card</Table.HeaderCell>
@@ -829,6 +830,7 @@ class Home extends Component {
                           {item.personEnrolment}
                         </Link>
                       </Table.Cell>
+                      <Table.Cell>{item.personEmail}</Table.Cell>
                       <Table.Cell>{item.personDegree}</Table.Cell>
                       <Table.Cell>{item.personDepartment}</Table.Cell>
                       <Table.Cell textAlign="center">
@@ -874,6 +876,7 @@ class Home extends Component {
                 </Table.HeaderCell>
                 <Table.HeaderCell>Name</Table.HeaderCell>
                 <Table.HeaderCell>Enrolment No. </Table.HeaderCell>
+                <Table.HeaderCell>Email Address </Table.HeaderCell>
                 <Table.HeaderCell>Branch</Table.HeaderCell>
                 <Table.HeaderCell>Department</Table.HeaderCell>
                 <Table.HeaderCell>ID Card</Table.HeaderCell>
@@ -931,7 +934,7 @@ class Home extends Component {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {permissions.data.results.map((item, key) => {
+              {permissions.data && permissions.data.results.map((item, key) => {
                 return (
                   <Table.Row>
                     <Table.Cell>
@@ -954,6 +957,7 @@ class Home extends Component {
                         {item.subscriber.personEnrolment}
                       </Link>
                     </Table.Cell>
+                    <Table.Cell>{item.subscriber.personEmail}</Table.Cell>
                     <Table.Cell>{item.subscriber.personDegree}</Table.Cell>
                     <Table.Cell>{item.subscriber.personDepartment}</Table.Cell>
                     <Table.Cell textAlign="center">

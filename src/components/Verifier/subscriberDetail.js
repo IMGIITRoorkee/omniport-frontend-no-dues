@@ -92,6 +92,8 @@ class SubscriberDetail extends Component {
                   <br />
                   Enrollment No: {studentDetail.data.personEnrolment}
                   <br />
+                  Email: {studentDetail.data.personEmail}
+                  <br/>
                   Branch: {studentDetail.data.personDepartment}
                 </div>
                 {studentDetail.data.idCard !== null && (

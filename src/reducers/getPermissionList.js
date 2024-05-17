@@ -30,11 +30,11 @@ const getPermissions = (
       return {
         ...state,
         isChanging: false,
-        data: state.data.map((x) => {
+        results: state.data.results.map((x) => {
           if (x.id === action.payload.permissionId) {
+            x.status = action.payload.status
             return {
-              ...x,
-              status: action.payload.status,
+              ...x
             };
           }
           return x;

@@ -15,6 +15,7 @@ import {
   getHostelOptions,
   uploadHostelDetails,
 } from "../../actions/hostelUploads";
+import { getPermissionList } from "../../actions/getPermissions";
 
 import main from "../../css/subscriber";
 
@@ -66,7 +67,10 @@ class HostelUploads extends Component {
   };
 
   onSubmitHostel = () => {
-    if (this.state.hostelSelected.length === 0) {
+    const { permissions } = this.props;
+    const hostelList = permissions.data.results.map(item =>item.authority.slug);
+
+    if (this.state.hostelSelected.length + hostelList.length === 0) {
       toast({
         type: "error",
         title: "Hostel Selected cannot be empty",
@@ -74,22 +78,44 @@ class HostelUploads extends Component {
         time: 1000,
       });
     } else {
+      let hostelSelected = this.state.hostelSelected;
       let messSelected = this.state.messSelected;
+
+      for (let hostel of hostelSelected){
+        if (hostelList.includes(hostel)){
+          toast({
+            type: "warning",
+            title: `Hostel "${hostel}" is already present in your permissions`,
+            animation: "fade up",
+            time: 3000,
+          });
+        }
+        else{
+          toast({
+            type: "success",
+            title: `Successfully created permission for ${hostel}`,
+            animation: "fade up",
+            time: 3000,
+          })
+        }
+      }
       if (messSelected === "no") {
         messSelected = "";
       }
-      this.props.uploadHostelDetails(this.state.hostelSelected, messSelected);
+      hostelSelected = [...hostelSelected, ...hostelList].filter(item => !item.endsWith("mess"));
+      this.props.uploadHostelDetails(hostelSelected, messSelected);
     }
     this.closeModal();
   };
 
   componentDidMount() {
     this.props.getHostelOptions();
+    this.props.getPermissionList();
   }
 
   render() {
-    const { hostels } = this.props;
-    if (hostels.isFetching) {
+    const { hostels, permissions } = this.props;
+    if (hostels.isFetching | permissions.isFetching) {
       return (
         <Dimmer active inverted>
           <Loader />
@@ -115,19 +141,23 @@ class HostelUploads extends Component {
             onChange={this.onChangeHostelValue}
             options={HostelToOptions(hostels.residenceOptions)}
           />
-          <h3>Select the latest Hostel Mess you were dinning in before the COVID-19. Do not include the temporary mess you were dining in due to this pandemic.</h3>
-          <div className={main["notif"]}>
-            Note: Please select the options carefully, this field is non
-            editable once submitted.
-          </div>
-          <Dropdown
-            fluid
-            selection
-            value={this.state.messSelected}
-            onChange={this.onChangeMessValue}
-            search
-            options={MessOptions(hostels.messOptions)}
-          />
+          {permissions.data.results.length === 0 && 
+            <div className={main["mess-select-form"]}> 
+              <h3>Select the latest Hostel Mess you were dinning in before the COVID-19. Do not include the temporary mess you were dining in due to this pandemic.</h3>
+              <div className={main["notif"]}>
+                Note: Please select the options carefully, this field is non
+                editable once submitted.
+              </div>
+              <Dropdown
+                fluid
+                selection
+                value={this.state.messSelected}
+                onChange={this.onChangeMessValue}
+                search
+                options={MessOptions(hostels.messOptions)}
+              />
+            </div>
+          }
           <Modal
             open={this.state.isModalOpen}
             trigger={
@@ -144,7 +174,7 @@ class HostelUploads extends Component {
             <Modal.Content>
               <h3>
                 Please make sure that you enter correct Bhawans and Mess details.
-                Any discrepancy will delay the process.
+                Any changes once submitted shall not be entertained.
               </h3>
               <Grid centered celled="internally" columns={2}>
                 <Grid.Column
@@ -175,11 +205,15 @@ class HostelUploads extends Component {
 const mapStateToProps = (state) => {
   return {
     hostels: state.getHostelOptions,
+    permissions: state.getPermissionList,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    getPermissionList: () => {
+      dispatch(getPermissionList())
+    },
     getHostelOptions: () => {
       dispatch(getHostelOptions());
     },

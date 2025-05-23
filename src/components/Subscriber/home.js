@@ -21,6 +21,7 @@ import {
   getPermissionList,
   changeStatusDetails
 } from '../../actions/getPermissions'
+import { addHostelAuthorities } from '../../actions/addHostelAuthorities'
 
 import main from '../../css/subscriber.css'
 
@@ -210,17 +211,26 @@ class SubscriberHome extends Component {
           <div>
             <b>
               <mark>You have to get no dues Approved, Not Applicable or Approved on Condition for all of the listed authorities.</mark>
-            <br />
+              <br />
               <mark>Read each of the instructions carefully before you apply for approval from any of the authorities.</mark>
-          </b>
+            </b>
           </div>
-          <Button
-            as='a'
-            href='https://www.iitr.ac.in/Main/uploads/File/website%20support/No%20Dues%20Student%20Manual.pdf'
-            target='_blank'>
-            <Icon name='question' />
-            Student Manual
-          </Button>
+
+          <div className={main['option-buttons']}>
+            <Button
+              as='a'
+              href='https://www.iitr.ac.in/Main/uploads/File/website%20support/No%20Dues%20Student%20Manual.pdf'
+              target='_blank'>
+              <Icon name='question' />
+              Student Manual
+            </Button>
+            <Button
+              primary
+              onClick={this.props.addHostelAuthorities}>
+              <Icon name='plus' />
+              Add Authorities
+            </Button>
+          </div>
         </div>
         <Table size='large' singleLine>
           <Table.Header>
@@ -296,7 +306,10 @@ const mapDispatchtoProps = dispatch => {
     },
     changeStatusDetails: (newStatus, permissionId) => {
       dispatch(changeStatusDetails(newStatus, permissionId))
-    }
+    },
+    addHostelAuthorities: () =>{
+      dispatch(addHostelAuthorities())
+    },
   }
 }
 

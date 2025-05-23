@@ -85,3 +85,7 @@ export function BhawanUploadApi() {
   return `${urlBaseApi()}/select_authorities/`;
 }
 
+export function BhawanAddApi() {
+  return `${urlBaseApi()}/add_authorities/`;
+}
+
